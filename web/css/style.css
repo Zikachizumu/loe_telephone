@@ -1,0 +1,2281 @@
+/* ==========================================================================
+   loe_telephone — web/css/style.css
+   --------------------------------------------------------------------------
+   Özgün akıllı telefon NUI kabuğu. Marka varlığı (Apple/Android/GTA/Rockstar
+   logo, ikon, yazı tipi, duvar kağıdı) KULLANILMAZ — tamamen özgün CSS/SVG.
+   Harici CDN/font/ikon YOK: sistem fontu zinciri + inline SVG glifler.
+   Koyu lacivert/grafit/siyah zemin + elektrik camgöbeği vurgu.
+   ========================================================================== */
+
+:root {
+  /* Kasa — ince, mat, metalik grafit (aşırı parlak/krom değil) */
+  --case-1: #3a4048;
+  --case-2: #1a1d21;
+  --case-3: #4d545c;
+  --case-shadow: rgba(0, 0, 0, 0.6);
+
+  /* Ekran zemini + yüzeyler */
+  --screen-bg: #0a0d12;
+  --surface-1: rgba(255, 255, 255, 0.05);
+  --surface-2: rgba(255, 255, 255, 0.08);
+  --surface-glass: rgba(18, 22, 28, 0.6);
+  --hairline: rgba(255, 255, 255, 0.08);
+
+  --text-primary: #eef2f6;
+  --text-secondary: #8b96a3;
+  --text-tertiary: #5a6472;
+
+  /* Vurgu — elektrik mavisi/camgöbeği (tek ana vurgu rengi) */
+  --accent: #22d3ee;
+  --accent-dim: rgba(34, 211, 238, 0.16);
+  --accent-ink: #04262c;
+
+  --success: #34d399;
+  --danger: #f4495f;
+  --warning: #f5a524;
+
+  --font-ui: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Inter', 'Helvetica Neue', Arial, sans-serif;
+
+  /* ---- Özgün, tek renkli (beyaz) app-icon glifleri ---- */
+  --svg-phone: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='white' d='M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C10.6 21 3 13.4 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.4 0 .8-.2 1z'/%3E%3C/svg%3E");
+  --svg-message: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='white' d='M4 4h16a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H9l-5 4v-4H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2z'/%3E%3C/svg%3E");
+  --svg-contact: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Ccircle fill='white' cx='12' cy='8' r='4'/%3E%3Cpath fill='white' d='M4 21a8 8 0 0 1 16 0z'/%3E%3C/svg%3E");
+  --svg-camera: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='white' fill-rule='evenodd' d='M4 8a2 2 0 0 1 2-2h2l1.2-1.6c.2-.3.5-.4.8-.4h4c.3 0 .6.1.8.4L16 6h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V8zm8 2.6a3.4 3.4 0 1 0 0 6.8 3.4 3.4 0 0 0 0-6.8z'/%3E%3C/svg%3E");
+  --svg-gallery: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Ccircle fill='white' cx='8' cy='8' r='2.3'/%3E%3Cpath fill='white' d='M3 19l5.5-7 4 4.5L16 12l5 7z'/%3E%3C/svg%3E");
+  --svg-settings: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cg fill='white'%3E%3Crect x='10.6' y='2' width='2.8' height='5' rx='1'/%3E%3Crect x='10.6' y='2' width='2.8' height='5' rx='1' transform='rotate(60 12 12)'/%3E%3Crect x='10.6' y='2' width='2.8' height='5' rx='1' transform='rotate(120 12 12)'/%3E%3Crect x='10.6' y='2' width='2.8' height='5' rx='1' transform='rotate(180 12 12)'/%3E%3Crect x='10.6' y='2' width='2.8' height='5' rx='1' transform='rotate(240 12 12)'/%3E%3Crect x='10.6' y='2' width='2.8' height='5' rx='1' transform='rotate(300 12 12)'/%3E%3Cpath fill-rule='evenodd' d='M12 6.5a5.5 5.5 0 1 1 0 11 5.5 5.5 0 0 1 0-11zm0 3a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5z'/%3E%3C/g%3E%3C/svg%3E");
+  --svg-search: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='none' stroke='white' stroke-width='2.2' stroke-linecap='round' d='M18.5 18.5L14 14m0 0a5 5 0 1 0-7.07-7.07A5 5 0 0 0 14 14z'/%3E%3C/svg%3E");
+  --svg-plus: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='white' d='M11 4h2v7h7v2h-7v7h-2v-7H4v-2h7z'/%3E%3C/svg%3E");
+  --svg-trash: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='white' fill-rule='evenodd' d='M9 3h6a1 1 0 0 1 1 1v1h4v2H4V5h4V4a1 1 0 0 1 1-1zM6 9h12l-1 11a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2L6 9z'/%3E%3C/svg%3E");
+  --svg-chevron: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='none' stroke='white' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round' d='M15 5l-7 7 7 7'/%3E%3C/svg%3E");
+  --svg-calculator: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='white' fill-rule='evenodd' d='M6 2.5h12a1.5 1.5 0 0 1 1.5 1.5v16a1.5 1.5 0 0 1-1.5 1.5H6A1.5 1.5 0 0 1 4.5 20V4A1.5 1.5 0 0 1 6 2.5zM6.8 5v4.2h10.4V5H6.8zm0 6.3v2h2.1v-2H6.8zm3.55 0v2h2.1v-2h-2.1zm3.55 0v2h2.1v-2h-2.1zM6.8 14.7v2h2.1v-2H6.8zm3.55 0v2h2.1v-2h-2.1zm3.55 0v5.3h2.1v-5.3h-2.1zM6.8 18v2h2.1v-2H6.8zm3.55 0v2h2.1v-2h-2.1z'/%3E%3C/svg%3E");
+  --svg-notes: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='white' fill-rule='evenodd' d='M6.5 2.5h8.4L18.5 7v14a1 1 0 0 1-1 1h-11a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1zM14 4v3.7h3.2L14 4zM7.2 12.3h9v1.6h-9v-1.6zm0 4h9v1.6h-9v-1.6zm0-8h5.2v1.6H7.2V8.3z'/%3E%3C/svg%3E");
+  --svg-appstore-fallback: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='white' d='M12 2 4 20h3.2l1.5-3.6h6.6L16.8 20H20L12 2zm0 5.4 2.3 5.6H9.7L12 7.4z'/%3E%3C/svg%3E");
+  --svg-cc-silent: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='white' d='M12 22a2 2 0 0 0 2-2h-4a2 2 0 0 0 2 2zm6-6v-5a6 6 0 0 0-4-5.66V4a2 2 0 1 0-4 0v1.34A6 6 0 0 0 6 11v5l-2 2v1h16v-1l-2-2z'/%3E%3Cpath fill='none' stroke='white' stroke-width='2' stroke-linecap='round' d='M3 3l18 18'/%3E%3C/svg%3E");
+  --svg-cc-flash: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='white' d='M13 2 3 14h6l-1 8 11-14h-7l1-6z'/%3E%3C/svg%3E");
+  --svg-cc-airshare: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Ccircle fill='white' cx='12' cy='12' r='2.4'/%3E%3Cpath fill='none' stroke='white' stroke-width='2' stroke-linecap='round' d='M7.5 16.5a6.5 6.5 0 0 1 0-9M16.5 7.5a6.5 6.5 0 0 1 0 9M4 20a10.5 10.5 0 0 1 0-16M20 4a10.5 10.5 0 0 1 0 16'/%3E%3C/svg%3E");
+  --svg-cc-brightness: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Ccircle fill='white' cx='12' cy='12' r='4'/%3E%3Cg stroke='white' stroke-width='2' stroke-linecap='round'%3E%3Cpath d='M12 2v3M12 19v3M2 12h3M19 12h3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1'/%3E%3C/g%3E%3C/svg%3E");
+  --svg-cc-volume: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='white' d='M12 2a2 2 0 0 0-2 2v1.34A6 6 0 0 0 6 11v5l-2 2v1h16v-1l-2-2v-5a6 6 0 0 0-4-5.66V4a2 2 0 0 0-2-2zm0 20a2 2 0 0 0 2-2h-4a2 2 0 0 0 2 2z'/%3E%3C/svg%3E");
+  --svg-send: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='white' d='M2.01 21L23 12 2.01 3 2 10l15 2-15 2z'/%3E%3C/svg%3E");
+  --svg-location: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='white' fill-rule='evenodd' d='M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z'/%3E%3C/svg%3E");
+
+  /* ---- Banka uygulaması (Los Santos Bank) — pembe/mor neon kimlik ---- */
+  --bank-surface:   #0e0c13;
+  --bank-surface-2: #141019;
+  --bank-card:      rgba(255, 255, 255, 0.035);
+  --bank-line:      rgba(255, 255, 255, 0.09);
+  --bank-text:      #f5f3f9;
+  --bank-dim:       #a09aae;
+  --bank-faint:     #6c6779;
+  --bank-primary:   #ff2e97;
+  --bank-secondary: #b46bff;
+  --bank-gain:      #34e07f;
+  --bank-warning:   #ffb648;
+  --svg-bank-diamond: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='white' d='M12 2 22 9 12 22 2 9Z'/%3E%3C/svg%3E");
+  --svg-bank-deposit: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cg fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 3v12'/%3E%3Cpath d='M7 10l5 5 5-5'/%3E%3Cpath d='M5 21h14'/%3E%3C/g%3E%3C/svg%3E");
+  --svg-bank-withdraw: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cg fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 21V9'/%3E%3Cpath d='M7 14l5-5 5 5'/%3E%3Cpath d='M5 3h14'/%3E%3C/g%3E%3C/svg%3E");
+  --svg-bank-history: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Ccircle cx='12' cy='12' r='9' fill='none' stroke='white' stroke-width='2'/%3E%3Cpath d='M12 7v5l3 2' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  --svg-bank-heart: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='white' d='M12 21s-7.5-4.5-10-9.5C.5 7 3 3.5 6.5 3.5c2 0 3.5 1 5.5 3 2-2 3.5-3 5.5-3C21 3.5 23.5 7 22 11.5 19.5 16.5 12 21 12 21z'/%3E%3C/svg%3E");
+  --svg-bank-copy: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cg fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='9' y='9' width='12' height='12' rx='2'/%3E%3Cpath d='M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1'/%3E%3C/g%3E%3C/svg%3E");
+  --svg-bank-arrow: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='none' stroke='white' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round' d='M5 12h14M13 6l6 6-6 6'/%3E%3C/svg%3E");
+  --svg-bank-refresh: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cg fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M21 2v6h-6'/%3E%3Cpath d='M3 12a9 9 0 0 1 15-6.7L21 8'/%3E%3Cpath d='M3 22v-6h6'/%3E%3Cpath d='M21 12a9 9 0 0 1-15 6.7L3 16'/%3E%3C/g%3E%3C/svg%3E");
+  --svg-bank-eye: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' d='M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12Z'/%3E%3Ccircle cx='12' cy='12' r='3' fill='none' stroke='white' stroke-width='2'/%3E%3C/svg%3E");
+  --svg-bank-eye-off: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' d='M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12Z'/%3E%3Ccircle cx='12' cy='12' r='3' fill='none' stroke='white' stroke-width='2'/%3E%3Cpath d='M3 3l18 18' fill='none' stroke='white' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E");
+
+  /* ---- Lifegram uygulaması (App Store'dan indirilir) — tek aksan: mercan ---- */
+  --social-primary:   #ff5a5f;
+  --social-primary-ink: #3a0f10;
+  --social-line:      rgba(255, 255, 255, 0.09);
+  --social-grad-1:    #f9ce34;
+  --social-grad-2:    #ee2a7b;
+  --social-grad-3:    #6228d7;
+  --svg-lifegram-glyph: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Ccircle cx='11' cy='13' r='7.5' fill='none' stroke='white' stroke-width='2'/%3E%3Cpath d='M4.5 13 L7 13 L9 8.5 L11.5 17.5 L13 11 L14.5 13 L18 13' fill='none' stroke='white' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3Ccircle cx='18.5' cy='5.5' r='1.6' fill='white'/%3E%3C/svg%3E");
+  --svg-social-home: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' d='M4 11.5 12 4l8 7.5M6 10v9a1 1 0 0 0 1 1h4v-6h2v6h4a1 1 0 0 0 1-1v-9'/%3E%3C/svg%3E");
+  --svg-social-heart: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' d='M12 20.5s-7-4.4-9.5-9C.8 7.8 3 4 6.7 4c2 0 3.6 1.1 5.3 3 1.7-1.9 3.3-3 5.3-3 3.7 0 5.9 3.8 4.2 7.5-2.5 4.6-9.5 9-9.5 9z'/%3E%3C/svg%3E");
+  --svg-social-heart-fill: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23ff5a5f' d='M12 20.5s-7-4.4-9.5-9C.8 7.8 3 4 6.7 4c2 0 3.6 1.1 5.3 3 1.7-1.9 3.3-3 5.3-3 3.7 0 5.9 3.8 4.2 7.5-2.5 4.6-9.5 9-9.5 9z'/%3E%3C/svg%3E");
+  --svg-social-bookmark: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' d='M6 3.5h12a1 1 0 0 1 1 1V21l-7-4-7 4V4.5a1 1 0 0 1 1-1z'/%3E%3C/svg%3E");
+  --svg-social-more: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cg fill='white'%3E%3Ccircle cx='5' cy='12' r='2'/%3E%3Ccircle cx='12' cy='12' r='2'/%3E%3Ccircle cx='19' cy='12' r='2'/%3E%3C/g%3E%3C/svg%3E");
+  --svg-social-close: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='none' stroke='white' stroke-width='2.2' stroke-linecap='round' d='M5 5l14 14M19 5L5 19'/%3E%3C/svg%3E");
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  background: transparent;
+  font-family: var(--font-ui);
+  color: var(--text-primary);
+  -webkit-font-smoothing: antialiased;
+  user-select: none;
+}
+
+button { font-family: inherit; }
+input { font-family: inherit; }
+
+.hidden { display: none !important; }
+[hidden] { display: none !important; }
+
+/* ==========================================================================
+   TELEFON GÖVDESİ — sağ alt, ince metalik grafit kasa
+   ========================================================================== */
+
+#phone-root {
+  position: fixed;
+  right: 32px;
+  bottom: 32px;
+  z-index: 1000;
+  opacity: 0;
+  transform: translateY(16px) scale(0.98);
+  transition: opacity 0.22s ease, transform 0.22s ease;
+  pointer-events: none;
+}
+#phone-root.open {
+  opacity: 1;
+  transform: none;
+  pointer-events: auto;
+}
+
+.phone-frame {
+  position: relative;
+  width: clamp(360px, 20vw, 390px);
+  aspect-ratio: 380 / 774;
+  border-radius: 46px;
+  overflow: hidden;
+  padding: 10px;
+  /* iç şerit — siyah cam/ayna (metal çerçeve ile ekran arasındaki bant) */
+  background:
+    linear-gradient(115deg, transparent 32%, rgba(255, 255, 255, 0.09) 46%, transparent 62%),
+    linear-gradient(160deg, #050608 0%, #000000 30%, #0a0c10 52%, #000000 76%, #060709 100%);
+  box-shadow:
+    inset 0 1px 2px rgba(255, 255, 255, 0.06),
+    inset 0 0 3px rgba(0, 0, 0, 0.9),
+    0 18px 44px -12px var(--case-shadow),
+    0 4px 14px rgba(0, 0, 0, 0.35);
+}
+
+/* Dış kenar — ince fırçalanmış metal çerçeve (titanyum/paslanmaz görünüm, marka değil) */
+.phone-frame::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 3px;
+  background: linear-gradient(
+    160deg,
+    #f4f6f8 0%,
+    #aeb5bc 7%,
+    #565d66 20%,
+    #8a9198 34%,
+    #232629 48%,
+    #9ea5ac 62%,
+    #3a3f44 78%,
+    #e8ebee 92%,
+    #6b7178 100%
+  );
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  box-shadow: inset 0 0 1px rgba(0, 0, 0, 0.7);
+  pointer-events: none;
+}
+
+/* Yan tuşlar (dekoratif) */
+.side-btn {
+  position: absolute;
+  background: linear-gradient(90deg, #14161a, #565d66, #14161a);
+  border-radius: 2px;
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.4);
+}
+.side-btn.action-btn { left: 0; top: 15%; width: 3px; height: 4%; }
+.side-btn.vol-up { left: 0; top: 24%; width: 3px; height: 6%; }
+.side-btn.vol-down { left: 0; top: 32%; width: 3px; height: 6%; }
+.side-btn.power-btn { right: 0; top: 26%; width: 3px; height: 8%; }
+
+.screen {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border-radius: 38px;
+  overflow: hidden;
+  background: var(--screen-bg);
+  box-shadow: inset 0 0 0 2px #000;
+}
+
+/* ==========================================================================
+   DURUM ÇUBUĞU + ADACIK (dynamic island — özgün, marka değil)
+   ========================================================================== */
+
+.status-bar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 46px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 26px;
+  z-index: 50;
+  pointer-events: none;
+  font-variant-numeric: tabular-nums;
+}
+
+.status-time {
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.2px;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+}
+
+.dynamic-island {
+  position: absolute;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 92px;
+  height: 26px;
+  background: #000;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 9px;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+}
+
+.island-lens, .island-sensor {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #0d1520;
+  box-shadow: inset 0 0 0 1px rgba(100, 140, 220, 0.3);
+}
+
+.island-line {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--success);
+  box-shadow: 0 0 6px var(--success);
+  animation: island-pulse 1.4s ease-in-out infinite;
+}
+@keyframes island-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.35; }
+}
+
+.status-icons {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  color: var(--text-primary);
+  background: none;
+  border: none;
+  padding: 8px 6px 8px 14px;
+  margin: -8px -6px -8px -14px;
+  pointer-events: auto;
+  cursor: pointer;
+}
+.status-icons svg { width: 16px; height: 10px; fill: currentColor; }
+.i-signal rect { fill: currentColor; }
+
+/* ==========================================================================
+   EKRAN GEÇİŞLERİ (ortak)
+   ========================================================================== */
+
+.screen-view {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(8px);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  display: flex;
+  flex-direction: column;
+}
+.screen-view.active { opacity: 1; pointer-events: auto; transform: none; }
+
+/* ==========================================================================
+   ANA EKRAN
+   ========================================================================== */
+
+#view-home {
+  padding: 58px 18px 0;
+  background:
+    linear-gradient(180deg, rgba(5, 6, 10, 0.32) 0%, rgba(5, 6, 10, 0.1) 28%, rgba(5, 6, 10, 0.5) 76%, rgba(5, 6, 10, 0.88) 100%),
+    url("../img/wallpaper-home.jpg");
+  background-size: cover, cover;
+  background-position: center, center;
+  background-repeat: no-repeat, no-repeat;
+}
+
+.app-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 22px 10px;
+  padding: 0 2px;
+  margin-top: 28px;
+}
+
+.app-icon {
+  background: none;
+  border: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 7px;
+  cursor: pointer;
+  position: relative;
+  padding: 0;
+}
+.app-icon.dragging { opacity: 0.35; }
+.app-icon.drag-over-before { box-shadow: inset 3px 0 0 0 var(--accent); }
+.app-icon.drag-over-after { box-shadow: inset -3px 0 0 0 var(--accent); }
+
+.app-icon .icon {
+  width: 56px;
+  height: 56px;
+  border-radius: 16px;
+  display: block;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+  background-size: 56% 56%;
+  background-repeat: no-repeat;
+  background-position: center;
+  transition: transform 0.12s ease;
+}
+.app-icon:active .icon { transform: scale(0.92); }
+
+.app-icon label {
+  font-size: 11.5px;
+  font-weight: 500;
+  color: var(--text-primary);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+.app-icon .badge {
+  position: absolute;
+  top: -4px;
+  right: 2px;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+  background: var(--danger);
+  border-radius: 9px;
+  font-size: 11px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 0 2px #05070a;
+}
+
+.icon-phone { background-color: var(--success); background-image: var(--svg-phone); }
+.app-icon .icon.icon-phone {
+  background-color: transparent;
+  background-image: url("../img/icon-phone.png");
+  background-size: 100% 100%;
+  background-position: center;
+  background-repeat: no-repeat;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.4);
+}
+.icon-messages { background-color: var(--accent); background-image: var(--svg-message); }
+.app-icon .icon.icon-messages {
+  background-color: transparent;
+  background-image: url("../img/icon-messages.png");
+  background-size: 100% 100%;
+  background-position: center;
+  background-repeat: no-repeat;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.4);
+}
+.icon-contacts { background-color: #4b5563; background-image: var(--svg-contact); }
+.app-icon .icon.icon-contacts {
+  background-color: transparent;
+  background-image: url("../img/icon-contacts.png");
+  background-size: 100% 100%;
+  background-position: center;
+  background-repeat: no-repeat;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.4);
+}
+.icon-camera { background-color: #262b33; background-image: var(--svg-camera); }
+.app-icon .icon.icon-camera {
+  background-color: transparent;
+  background-image: url("../img/icon-camera.png");
+  background-size: 100% 100%;
+  background-position: center;
+  background-repeat: no-repeat;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.4);
+}
+.icon-gallery {
+  background-image: var(--svg-gallery), linear-gradient(135deg, #64748b, #334155);
+  background-size: 56% 56%, 100% 100%;
+  background-position: center, center;
+  background-repeat: no-repeat, no-repeat;
+}
+.app-icon .icon.icon-gallery {
+  background-color: transparent;
+  background-image: url("../img/icon-gallery.png");
+  background-size: 100% 100%;
+  background-position: center;
+  background-repeat: no-repeat;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.4);
+}
+.icon-settings { background-color: #4b5563; background-image: var(--svg-settings); }
+.app-icon .icon.icon-settings {
+  background-color: transparent;
+  background-image: url("../img/icon-settings.png");
+  background-size: 100% 100%;
+  background-position: center;
+  background-repeat: no-repeat;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.4);
+}
+.icon-appstore { background-color: #0ea5e9; background-image: var(--svg-appstore-fallback); }
+.app-icon .icon.icon-appstore {
+  background-color: transparent;
+  background-image: url("../img/icon-appstore.png");
+  background-size: 100% 100%;
+  background-position: center;
+  background-repeat: no-repeat;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.4);
+}
+.icon-calculator { background-color: #ff9f0a; background-image: var(--svg-calculator); }
+.icon-notes { background-color: #eab308; background-image: var(--svg-notes); }
+.icon-lifegram,
+.app-icon .icon.icon-lifegram,
+.store-app-icon.icon-lifegram {
+  background-color: transparent;
+  background-image: url("../img/icon-lifegram.png");
+  background-size: 100% 100%;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+.app-icon .icon.icon-lifegram { box-shadow: 0 3px 6px rgba(0, 0, 0, 0.4); }
+.icon-marketplace,
+.app-icon .icon.icon-marketplace,
+.store-app-icon.icon-marketplace {
+  background-color: transparent;
+  background-image: url("../img/icon-marketplace.png");
+  background-size: 100% 100%;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+.app-icon .icon.icon-marketplace { box-shadow: 0 3px 6px rgba(0, 0, 0, 0.4); }
+.icon-banka {
+  background-image: var(--svg-bank-diamond), linear-gradient(135deg, var(--bank-primary), var(--bank-secondary));
+  background-size: 46% 46%, 100% 100%;
+  background-position: center, center;
+  background-repeat: no-repeat, no-repeat;
+}
+.icon-telegram { background-color: #29a9eb; }
+.app-icon .icon.icon-telegram {
+  background-color: transparent;
+  background-image: url("../img/icon-telegram.png");
+  background-size: 100% 100%;
+  background-position: center;
+  background-repeat: no-repeat;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.4);
+}
+.store-app-icon.icon-telegram {
+  background-color: transparent;
+  background-image: url("../img/icon-telegram.png");
+  background-size: 100% 100%;
+}
+.icon-call { background: none; background-image: var(--svg-phone); }
+.icon-call-end { background: none; background-image: var(--svg-phone); transform: rotate(135deg); }
+.icon-plus { background: none; background-image: var(--svg-plus); }
+.icon-trash { background: none; background-image: var(--svg-trash); }
+.icon-search { background: none; background-image: var(--svg-search); }
+.icon-send { background: none; background-image: var(--svg-send); }
+.icon-location { background: none; background-image: var(--svg-location); }
+.icon-photo { background: none; background-image: var(--svg-gallery); }
+.icon-bank-deposit { background: none; background-image: var(--svg-bank-deposit); }
+.icon-bank-withdraw { background: none; background-image: var(--svg-bank-withdraw); }
+.icon-bank-history { background: none; background-image: var(--svg-bank-history); }
+.icon-bank-heart { background: none; background-image: var(--svg-bank-heart); }
+.icon-bank-copy { background: none; background-image: var(--svg-bank-copy); }
+.icon-bank-arrow { background: none; background-image: var(--svg-bank-arrow); }
+.icon-bank-refresh { background: none; background-image: var(--svg-bank-refresh); }
+.icon-bank-eye { background: none; background-image: var(--svg-bank-eye); }
+.icon-bank-eye-off { background: none; background-image: var(--svg-bank-eye-off); }
+.icon-message { background: none; background-image: var(--svg-message); }
+.icon-social-home { background: none; background-image: var(--svg-social-home); }
+.icon-social-heart { background: none; background-image: var(--svg-social-heart); }
+.icon-social-heart-fill { background: none; background-image: var(--svg-social-heart-fill); }
+.icon-social-bookmark { background: none; background-image: var(--svg-social-bookmark); }
+.icon-social-more { background: none; background-image: var(--svg-social-more); }
+.icon-social-close { background: none; background-image: var(--svg-social-close); }
+.icon-social-settings { background: none; background-image: var(--svg-settings); }
+
+.context-menu {
+  position: absolute;
+  z-index: 500;
+  background: rgba(24, 28, 36, 0.96);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid var(--hairline);
+  border-radius: 10px;
+  padding: 4px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+}
+.context-menu button {
+  display: block;
+  width: 100%;
+  text-align: left;
+  background: none;
+  border: none;
+  color: var(--danger);
+  font-size: 13px;
+  font-weight: 600;
+  padding: 8px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.context-menu button:active { background: rgba(244, 73, 95, 0.12); }
+
+.dock {
+  position: absolute;
+  left: 14px;
+  right: 14px;
+  bottom: 22px;
+  background: var(--surface-glass);
+  backdrop-filter: blur(22px);
+  -webkit-backdrop-filter: blur(22px);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 28px;
+  padding: 10px 18px;
+  display: flex;
+  justify-content: space-around;
+}
+.dock-icon .icon { width: 50px; height: 50px; }
+
+/* ==========================================================================
+   UYGULAMA KABUĞU (header + back button — tüm app view'larda ortak)
+   ========================================================================== */
+
+.app-view { background: var(--screen-bg); padding-top: 46px; }
+
+.app-header {
+  display: flex;
+  align-items: center;
+  padding: 10px 14px 8px;
+  position: relative;
+  min-height: 38px;
+  border-bottom: 1px solid var(--hairline);
+}
+.app-header h1 {
+  flex: 1;
+  font-size: 16px;
+  font-weight: 600;
+  margin: 0;
+  text-align: center;
+}
+.back-btn {
+  background: none;
+  border: none;
+  color: var(--accent);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  padding: 10px 12px;
+  position: absolute;
+  left: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.back-btn .chev {
+  width: 13px;
+  height: 20px;
+  background-color: var(--accent);
+  -webkit-mask-image: var(--svg-chevron);
+  mask-image: var(--svg-chevron);
+  -webkit-mask-size: contain;
+  mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-position: center;
+}
+.back-btn.ghost { color: var(--text-primary); font-size: 16px; }
+.back-btn.ghost .chev { background-color: var(--text-primary); }
+.header-action {
+  background: none;
+  border: none;
+  color: var(--accent);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  position: absolute;
+  right: 12px;
+  display: flex;
+  align-items: center;
+}
+.header-action .icon {
+  width: 20px;
+  height: 20px;
+  display: block;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+.header-actions { position: absolute; right: 6px; display: flex; align-items: center; gap: 2px; }
+
+.header-icon-btn {
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  border: none;
+  background: var(--surface-2);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.header-icon-btn .icon { width: 16px; height: 16px; }
+
+/* ==========================================================================
+   ARAMA KUTUSU (rehber)
+   ========================================================================== */
+
+.search-bar {
+  margin: 10px 14px;
+  background: var(--surface-1);
+  border: 1px solid var(--hairline);
+  border-radius: 12px;
+  padding: 8px 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.search-bar .icon { width: 15px; height: 15px; flex-shrink: 0; opacity: 0.55; }
+.search-bar input {
+  flex: 1;
+  background: none;
+  border: none;
+  color: var(--text-primary);
+  font-size: 14px;
+  outline: none;
+}
+.search-bar input::placeholder { color: var(--text-tertiary); }
+
+/* ==========================================================================
+   LİSTELER (rehber / sohbetler / aramalar / hatlar — ortak)
+   ========================================================================== */
+
+.list { list-style: none; margin: 0; padding: 4px 0 20px; overflow-y: auto; flex: 1; }
+.list-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--hairline);
+  cursor: pointer;
+}
+.list-row:active { background: rgba(255, 255, 255, 0.04); }
+.avatar {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #38bdf8, var(--accent));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: 600;
+  flex-shrink: 0;
+  color: #04262c;
+}
+.row-main { flex: 1; min-width: 0; }
+.row-title { font-size: 14.5px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.row-sub { font-size: 12.5px; color: var(--text-secondary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-top: 2px; }
+.row-meta { font-size: 11.5px; color: var(--text-tertiary); flex-shrink: 0; text-align: right; }
+.row-meta .unread {
+  display: inline-block;
+  min-width: 17px;
+  height: 17px;
+  padding: 0 5px;
+  background: var(--accent);
+  color: #04262c;
+  font-weight: 700;
+  border-radius: 9px;
+  font-size: 10.5px;
+  line-height: 17px;
+  margin-top: 4px;
+}
+.row-meta.missed { color: var(--danger); }
+
+/* rehber satırındaki hızlı ara/mesaj düğmeleri */
+.row-actions { display: flex; gap: 6px; flex-shrink: 0; }
+.row-action-btn {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.row-action-btn.call { background: rgba(52, 211, 153, 0.16); }
+.row-action-btn.call .icon { background-image: var(--svg-phone); }
+.row-action-btn.message { background: var(--accent-dim); }
+.row-action-btn.message .icon { background-image: var(--svg-message); }
+.row-action-btn .icon {
+  width: 14px;
+  height: 14px;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+.row-action-btn.call .icon { filter: none; background-color: transparent; }
+.row-action-btn.call .icon, .row-action-btn.message .icon { background-color: transparent; }
+
+.empty-hint { text-align: center; color: var(--text-tertiary); font-size: 13.5px; margin-top: 40px; padding: 0 30px; }
+
+/* ==========================================================================
+   APP STORE
+   ========================================================================== */
+
+.store-row { cursor: default; }
+.store-app-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  flex-shrink: 0;
+  background-size: 56% 56%;
+  background-repeat: no-repeat;
+  background-position: center;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.35);
+}
+.store-action-btn {
+  flex-shrink: 0;
+  border: none;
+  border-radius: 14px;
+  padding: 7px 16px;
+  font-size: 12.5px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.store-action-btn.install { background: var(--accent-dim); color: var(--accent); }
+.store-action-btn.open { background: var(--surface-2); color: var(--text-primary); }
+
+.store-action-slot { display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.install-progress { position: relative; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; }
+.install-ring { width: 36px; height: 36px; transform: rotate(-90deg); }
+.install-ring-bg { fill: none; stroke: var(--surface-2); stroke-width: 3; }
+.install-ring-fg { fill: none; stroke: var(--accent); stroke-width: 3; stroke-linecap: round; transition: stroke-dashoffset 0.1s linear; }
+.install-progress-text {
+  position: absolute;
+  font-size: 8.5px;
+  font-weight: 700;
+  color: var(--accent);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ==========================================================================
+   TELEFON — TUŞ TAKIMI
+   ========================================================================== */
+
+.segmented {
+  display: flex;
+  margin: 10px 14px;
+  background: var(--surface-1);
+  border-radius: 10px;
+  padding: 3px;
+  border: 1px solid var(--hairline);
+}
+.seg-btn {
+  flex: 1;
+  border: none;
+  background: none;
+  color: var(--text-secondary);
+  font-size: 12.5px;
+  font-weight: 500;
+  padding: 7px 0;
+  border-radius: 8px;
+  cursor: pointer;
+}
+.seg-btn.active { background: var(--accent-dim); color: var(--accent); }
+
+.tab-panel { flex: 1; display: flex; flex-direction: column; }
+.nm-panel { flex: 1; display: flex; flex-direction: column; }
+
+.dial-display {
+  text-align: center;
+  font-size: 30px;
+  font-weight: 300;
+  letter-spacing: 2px;
+  min-height: 38px;
+  margin: 6px 0 2px;
+  color: var(--text-primary);
+  font-variant-numeric: tabular-nums;
+}
+.dial-contact-name { text-align: center; font-size: 13px; color: var(--accent); min-height: 16px; margin-bottom: 2px; }
+
+.keypad {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 9px;
+  padding: 0 28px;
+  justify-items: center;
+  margin-top: auto;
+}
+.key-btn {
+  width: 85px;
+  height: 85px;
+  border-radius: 50%;
+  border: none;
+  background: var(--surface-1);
+  color: var(--text-primary);
+  font-size: 28px;
+  font-weight: 400;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--hairline);
+}
+.key-btn:active { background: var(--surface-2); }
+.key-btn.key-del {
+  font-size: 24px;
+  color: var(--text-secondary);
+  background: none;
+  border-color: transparent;
+  width: 85px;
+  height: 85px;
+}
+.key-spacer { pointer-events: none; }
+
+.keypad-actions {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 9px;
+  padding: 0 28px;
+  align-items: center;
+  justify-items: center;
+  margin: 8px 0 calc(22px + env(safe-area-inset-bottom, 0px));
+}
+.call-fab {
+  width: 85px;
+  height: 85px;
+  border-radius: 50%;
+  background: var(--success);
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 6px 16px rgba(52, 211, 153, 0.35);
+}
+.call-fab .icon { width: 36px; height: 36px; background-size: 60% 60%; background-repeat: no-repeat; background-position: center; }
+
+/* ==========================================================================
+   MESAJLAR — SOHBET
+   ========================================================================== */
+
+.thread-messages {
+  flex: 1;
+  overflow-y: auto;
+  padding: 14px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.bubble {
+  max-width: 72%;
+  padding: 9px 13px;
+  border-radius: 18px;
+  font-size: 14px;
+  line-height: 1.35;
+  word-wrap: break-word;
+  white-space: pre-wrap;
+}
+.bubble.out { align-self: flex-end; background: var(--accent); color: #04262c; border-bottom-right-radius: 4px; }
+.bubble.in { align-self: flex-start; background: var(--surface-2); color: var(--text-primary); border-bottom-left-radius: 4px; }
+.bubble-sender { font-size: 10.5px; font-weight: 700; color: var(--accent); margin-bottom: 2px; }
+.bubble.out .bubble-sender { color: #04262c; opacity: 0.7; }
+.bubble-photo { display: block; max-width: 220px; max-height: 220px; border-radius: 12px; }
+.bubble-photo + .bubble-text { margin-top: 6px; }
+.bubble-location { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.bubble-location .icon { width: 18px; height: 18px; flex-shrink: 0; }
+.bubble-map-btn {
+  flex-shrink: 0;
+  margin-left: auto;
+  background: rgba(0, 0, 0, 0.18);
+  border: none;
+  border-radius: 8px;
+  padding: 5px 10px;
+  font-size: 11.5px;
+  font-weight: 700;
+  color: inherit;
+  cursor: pointer;
+}
+.bubble.in .bubble-map-btn { background: rgba(255, 255, 255, 0.08); }
+
+/* ==========================================================================
+   TELEGRAM — davet şeridi (grup sohbeti) + kod ile katıl satırı (grup arama)
+   ========================================================================== */
+
+.invite-strip {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 10px 14px 0;
+  padding: 8px 12px;
+  background: var(--surface-1);
+  border: 1px solid var(--hairline);
+  border-radius: 10px;
+  font-size: 12px;
+}
+.invite-strip-label { color: var(--text-secondary); flex-shrink: 0; }
+.invite-strip-code {
+  flex: 1;
+  color: var(--accent);
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  font-variant-numeric: tabular-nums;
+}
+.invite-copy-btn {
+  flex-shrink: 0;
+  background: var(--accent-dim);
+  color: var(--accent);
+  border: none;
+  border-radius: 8px;
+  padding: 5px 10px;
+  font-size: 11.5px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.invite-copy-btn.copied { background: rgba(52, 211, 153, 0.18); color: var(--success); }
+
+.invite-join-row {
+  display: flex;
+  gap: 8px;
+  padding: 10px 14px calc(14px + env(safe-area-inset-bottom, 0px));
+  border-top: 1px solid var(--hairline);
+}
+.invite-join-row input {
+  flex: 1;
+  background: var(--surface-1);
+  border: 1px solid var(--hairline);
+  border-radius: 10px;
+  padding: 9px 12px;
+  color: var(--text-primary);
+  font-size: 13.5px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+.invite-join-row input::placeholder { color: var(--text-tertiary); text-transform: none; letter-spacing: normal; }
+.primary-btn.small { margin-top: 0; padding: 0 16px; font-size: 13px; flex-shrink: 0; }
+
+.thread-compose {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px calc(10px + env(safe-area-inset-bottom, 0px));
+  border-top: 1px solid var(--hairline);
+}
+.thread-compose input {
+  flex: 1;
+  background: var(--surface-1);
+  border: 1px solid var(--hairline);
+  border-radius: 18px;
+  padding: 9px 14px;
+  color: var(--text-primary);
+  font-size: 13.5px;
+}
+.thread-compose input::placeholder { color: var(--text-tertiary); }
+
+.attach-btn {
+  flex-shrink: 0;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: none;
+  background: var(--surface-2);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.attach-btn .icon { width: 15px; height: 15px; }
+
+.send-btn {
+  flex-shrink: 0;
+  width: 27px;
+  height: 27px;
+  padding: 0;
+  background: var(--accent);
+  color: #04262c;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.send-btn .icon { width: 12px; height: 12px; background-color: transparent; }
+.send-btn:disabled { opacity: 0.4; }
+
+/* Ekle menüsü — sohbette "+" ile açılan küçük eylem listesi (konum/fotoğraf) */
+.attach-menu {
+  position: absolute;
+  left: 12px;
+  bottom: 62px;
+  z-index: 90;
+  background: rgba(24, 28, 36, 0.96);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid var(--hairline);
+  border-radius: 14px;
+  padding: 6px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(6px) scale(0.96);
+  transition: opacity 0.15s ease, transform 0.15s ease;
+}
+.attach-menu.open { opacity: 1; pointer-events: auto; transform: none; }
+.attach-menu-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  background: none;
+  border: none;
+  border-radius: 9px;
+  padding: 9px 12px;
+  color: var(--text-primary);
+  font-size: 13px;
+  font-weight: 500;
+  white-space: nowrap;
+  cursor: pointer;
+}
+.attach-menu-item:active { background: var(--surface-2); }
+.attach-menu-item .icon { width: 17px; height: 17px; flex-shrink: 0; }
+
+/* ==========================================================================
+   REHBER — FORM / GALERİ FORM (ortak)
+   ========================================================================== */
+
+.form { padding: 18px 16px; display: flex; flex-direction: column; gap: 6px; }
+.form label { font-size: 11.5px; color: var(--text-secondary); margin-top: 10px; text-transform: uppercase; letter-spacing: 0.4px; }
+.form input, .form textarea {
+  background: var(--surface-1);
+  border: 1px solid var(--hairline);
+  border-radius: 10px;
+  padding: 11px 13px;
+  color: var(--text-primary);
+  font-size: 14.5px;
+  resize: none;
+}
+.primary-btn {
+  margin-top: 20px;
+  background: var(--accent);
+  color: #04262c;
+  border: none;
+  border-radius: 12px;
+  padding: 12px;
+  font-size: 14.5px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.danger-btn {
+  margin-top: 10px;
+  background: none;
+  color: var(--danger);
+  border: none;
+  border-radius: 12px;
+  padding: 12px;
+  font-size: 14.5px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* ==========================================================================
+   AYARLAR (hat değiştir — ana ekrandaki SIM rozetinden açılır)
+   ========================================================================== */
+
+.settings-section { padding: 16px; }
+.settings-section h2 { font-size: 12px; text-transform: uppercase; color: var(--text-secondary); letter-spacing: 0.5px; margin: 6px 0; }
+.hint-text { font-size: 11.5px; color: var(--text-tertiary); margin-top: 10px; line-height: 1.5; }
+.line-row .row-title { font-variant-numeric: tabular-nums; letter-spacing: 0.5px; }
+.line-row .active-tag {
+  font-size: 10.5px;
+  font-weight: 700;
+  color: #04262c;
+  background: var(--accent);
+  padding: 2px 8px;
+  border-radius: 8px;
+  margin-left: 6px;
+}
+
+/* ==========================================================================
+   KAMERA — TAM EKRAN (GTA Online tarzı)
+   #camera-overlay tamamen şeffaftır; arkada script kamera tam ekran görünür.
+   Kamera modunda telefon kasası gizlenir. Kadraj dışı, .cam-window'un dev
+   box-shadow'u ile karartılır (Instagram'daki oran maskesi gibi).
+   ========================================================================== */
+
+.camera-app { background: transparent; padding-top: 0; }
+body.camera-mode #phone-root { opacity: 0; pointer-events: none; }
+
+#camera-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+  overflow: hidden;
+  pointer-events: none;
+  color: #fff;
+  font-family: var(--font-ui);
+}
+
+.cam-window {
+  position: absolute;
+  box-shadow: 0 0 0 200vmax rgba(0, 0, 0, 0.55);
+  transition: left 0.18s ease, top 0.18s ease, width 0.18s ease, height 0.18s ease;
+}
+.cam-window.snap::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  box-shadow: inset 0 0 0 6px rgba(255, 255, 255, 0.9);
+  animation: cam-snap 0.3s ease-out forwards;
+}
+@keyframes cam-snap { to { opacity: 0; } }
+.cam-corner { position: absolute; width: 34px; height: 34px; border: 0 solid rgba(255, 255, 255, 0.9); }
+.cam-corner.tl { top: 18px; left: 18px; border-width: 3px 0 0 3px; }
+.cam-corner.tr { top: 18px; right: 18px; border-width: 3px 3px 0 0; }
+.cam-corner.bl { bottom: 18px; left: 18px; border-width: 0 0 3px 3px; }
+.cam-corner.br { bottom: 18px; right: 18px; border-width: 0 3px 3px 0; }
+.cam-focus {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 64px;
+  height: 64px;
+  margin: -32px 0 0 -32px;
+  border: 1.5px solid rgba(255, 255, 255, 0.7);
+  border-radius: 50%;
+}
+.cam-focus::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 6px;
+  height: 6px;
+  margin: -3px 0 0 -3px;
+  border-radius: 50%;
+  background: var(--accent);
+}
+/* Kameradaki TÜM yazılar %50 opak siyah zemin üzerinde: gündüz parlak
+   sahnede de okunur. */
+.cam-saved {
+  position: absolute;
+  top: 76px;
+  left: 32px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 14px 6px 6px;
+  border-radius: 12px;
+  background: rgba(0, 0, 0, 0.5);
+  font-size: 13px;
+  font-weight: 600;
+}
+.cam-saved img { width: 44px; height: 44px; border-radius: 8px; object-fit: cover; }
+
+.cam-top { position: absolute; top: 28px; left: 0; right: 0; display: flex; justify-content: center; gap: 8px; }
+.cam-pill {
+  padding: 6px 14px;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.5);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.6px;
+}
+.cam-flash-ind { color: rgba(255, 255, 255, 0.55); }
+.cam-flash-ind.active { color: var(--accent); }
+.cam-rec { color: #ff4d5e; font-variant-numeric: tabular-nums; animation: cam-rec-blink 1s steps(2, start) infinite; }
+@keyframes cam-rec-blink { 50% { color: #ffb3ba; } }
+.cam-window.recording { box-shadow: 0 0 0 200vmax rgba(0, 0, 0, 0.55), inset 0 0 0 3px #ff4d5e; }
+
+.cam-bottom {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 26px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+.cam-modes {
+  display: flex;
+  gap: 22px;
+  padding: 7px 20px;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.5);
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+.cam-mode { color: rgba(255, 255, 255, 0.6); }
+.cam-mode.active { color: var(--accent); }
+#camera-media .cam-mode.active[data-media="video"] { color: #ff4d5e; }
+.cam-modes.locked .cam-mode:not(.active) { color: rgba(255, 255, 255, 0.3); }
+.cam-ratios { display: flex; gap: 8px; }
+.cam-ratio {
+  padding: 4px 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  background: rgba(0, 0, 0, 0.5);
+  font-size: 12px;
+  font-weight: 700;
+}
+.cam-ratio.active { border-color: var(--accent); color: var(--accent); }
+.cam-dest {
+  margin: 0;
+  padding: 4px 12px;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.5);
+  font-size: 12px;
+}
+.cam-keys {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 6px 16px;
+  max-width: calc(100% - 32px);
+  padding: 6px 16px;
+  border-radius: 14px;
+  background: rgba(0, 0, 0, 0.5);
+  font-size: 12px;
+}
+.cam-keys kbd {
+  display: inline-block;
+  min-width: 20px;
+  margin-right: 5px;
+  padding: 2px 6px;
+  border-radius: 5px;
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  background: rgba(255, 255, 255, 0.14);
+  font-family: inherit;
+  font-size: 11px;
+  font-weight: 700;
+  text-align: center;
+  text-shadow: none;
+}
+.cam-keys kbd + kbd { margin-left: -2px; }
+
+.flash-pulse {
+  position: absolute;
+  inset: 0;
+  background: #fff;
+  opacity: 0;
+  pointer-events: none;
+  z-index: 90;
+}
+.flash-pulse.firing { animation: flash-pulse-anim 0.35s ease-out; }
+@keyframes flash-pulse-anim {
+  0% { opacity: 0.95; }
+  100% { opacity: 0; }
+}
+
+/* ==========================================================================
+   GALERİ — 2 sütun, açıklama, ekle/sil
+   ========================================================================== */
+
+.gallery-grid {
+  flex: 1;
+  overflow-y: auto;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  padding: 12px;
+  align-content: start;
+}
+.gallery-item {
+  position: relative;
+  aspect-ratio: 1;
+  border-radius: 14px;
+  overflow: hidden;
+  background: var(--surface-1);
+  border: 1px solid var(--hairline);
+  cursor: pointer;
+}
+.gallery-item img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.gallery-item .cap {
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  padding: 6px 8px;
+  font-size: 11px;
+  color: #fff;
+  background: linear-gradient(to top, rgba(0,0,0,0.75), transparent);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.photo-view {
+  background: #000;
+  padding-top: 46px;
+  display: flex;
+  flex-direction: column;
+}
+.photo-view-img { flex: 1; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+.photo-view-img img,
+.photo-view-img video { max-width: 100%; max-height: 100%; object-fit: contain; }
+.gallery-item .vid {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  padding: 2px 7px;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.6);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+.photo-view-caption {
+  padding: 12px 16px calc(16px + env(safe-area-inset-bottom, 0px));
+  font-size: 13.5px;
+  color: var(--text-secondary);
+  border-top: 1px solid var(--hairline);
+}
+
+/* ==========================================================================
+   ARAMA — TAM EKRAN (gelen / aktif)
+   ========================================================================== */
+
+.call-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 200;
+  background: radial-gradient(120% 90% at 50% 8%, #171d26 0%, #0a0d12 60%, #05070a 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 16%;
+}
+.call-avatar {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #38bdf8, var(--accent));
+}
+.call-avatar.pulsing { animation: call-pulse 1.6s ease-in-out infinite; }
+@keyframes call-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(34, 211, 238, 0.35); }
+  50% { box-shadow: 0 0 0 16px rgba(34, 211, 238, 0); }
+}
+.call-label { margin-top: 16px; font-size: 13px; color: var(--text-secondary); }
+.call-number { margin: 4px 0 0; font-size: 24px; font-weight: 600; font-variant-numeric: tabular-nums; letter-spacing: 0.5px; }
+.call-timer { margin-top: 8px; font-size: 13px; color: var(--text-secondary); font-variant-numeric: tabular-nums; }
+
+.call-actions { margin-top: auto; margin-bottom: 54px; display: flex; gap: 64px; }
+.call-actions.single { gap: 0; }
+.call-btn {
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
+}
+.call-btn.accept { background: var(--success); }
+.call-btn.decline { background: var(--danger); }
+.call-btn .icon { width: 22px; height: 22px; background-size: 60% 60%; background-repeat: no-repeat; background-position: center; }
+
+/* ==========================================================================
+   ALT GÖSTERGE ÇUBUĞU
+   ========================================================================== */
+
+.home-indicator {
+  position: absolute;
+  bottom: 7px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 120px;
+  height: 4px;
+  border-radius: 3px;
+  background: rgba(255, 255, 255, 0.5);
+  z-index: 60;
+}
+
+/* ==========================================================================
+   HESAP MAKİNESİ (App Store'dan indirilir)
+   ========================================================================== */
+
+.calc-display {
+  text-align: right;
+  padding: 20px 22px 6px;
+  font-size: 46px;
+  font-weight: 300;
+  color: var(--text-primary);
+  font-variant-numeric: tabular-nums;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.calc-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  padding: 8px 16px 20px;
+}
+
+.calc-btn {
+  aspect-ratio: 1;
+  border-radius: 50%;
+  border: none;
+  background: var(--surface-1);
+  color: var(--text-primary);
+  font-size: 19px;
+  font-weight: 500;
+  cursor: pointer;
+  border: 1px solid var(--hairline);
+}
+.calc-btn:active { background: var(--surface-2); }
+.calc-btn.calc-fn { background: var(--surface-2); color: var(--text-secondary); }
+.calc-btn.calc-op { background: var(--accent-dim); color: var(--accent); font-size: 22px; }
+.calc-btn.calc-eq { background: var(--accent); color: #04262c; font-size: 22px; }
+.calc-btn.calc-zero {
+  grid-column: span 2;
+  aspect-ratio: auto;
+  border-radius: 999px;
+  text-align: left;
+  padding-left: 24px;
+}
+
+/* ==========================================================================
+   NOTLAR (App Store'dan indirilir)
+   ========================================================================== */
+
+.note-textarea {
+  flex: 1;
+  margin: 12px 14px calc(14px + env(safe-area-inset-bottom, 0px));
+  background: var(--surface-1);
+  border: 1px solid var(--hairline);
+  border-radius: 12px;
+  padding: 14px;
+  color: var(--text-primary);
+  font-size: 14.5px;
+  line-height: 1.5;
+  resize: none;
+  font-family: inherit;
+}
+.note-textarea::placeholder { color: var(--text-tertiary); }
+
+/* ==========================================================================
+   KONTROL MERKEZİ (durum çubuğu simgelerinden açılır)
+   ========================================================================== */
+
+.control-center {
+  position: absolute;
+  inset: 0;
+  z-index: 300;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.18s ease;
+}
+.control-center.open { opacity: 1; pointer-events: auto; }
+.cc-backdrop { position: absolute; inset: 0; background: rgba(0, 0, 0, 0.35); }
+.cc-panel {
+  position: absolute;
+  top: 54px;
+  right: 14px;
+  left: 14px;
+  background: rgba(20, 24, 31, 0.92);
+  backdrop-filter: blur(22px);
+  -webkit-backdrop-filter: blur(22px);
+  border: 1px solid var(--hairline);
+  border-radius: 22px;
+  padding: 14px;
+  display: flex;
+  align-items: stretch;
+  gap: 12px;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.5);
+  transform: translateY(-8px) scale(0.97);
+  transition: transform 0.18s ease;
+}
+.control-center.open .cc-panel { transform: none; }
+
+/* Sol: 2x3 toggle ızgarası (6 kutu — 3 gerçek fonksiyon + 3 boş yer tutucu) */
+.cc-toggles {
+  flex: 1.2;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-auto-rows: 1fr;
+  gap: 8px;
+}
+.cc-toggle-btn {
+  background: var(--surface-1);
+  border: 1px solid var(--hairline);
+  border-radius: 50%;
+  aspect-ratio: 1 / 1;
+  height: 100%;
+  width: auto;
+  justify-self: center;
+  align-self: center;
+  padding: 8px 4px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  cursor: pointer;
+}
+.cc-toggle-empty {
+  border: 1px dashed rgba(255, 255, 255, 0.06);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.5);
+}
+.cc-toggle-btn .icon { width: 19px; height: 19px; background-size: contain; background-repeat: no-repeat; background-position: center; background-color: transparent; }
+.cc-toggle-btn .icon-cc-silent, .cc-toggle-btn .icon-cc-flash, .cc-toggle-btn .icon-cc-airshare { background: none; }
+.cc-toggle-btn#cc-silent .icon { background-image: var(--svg-cc-silent); }
+.cc-toggle-btn#cc-flash .icon { background-image: var(--svg-cc-flash); }
+.cc-toggle-btn#cc-airshare .icon { background-image: var(--svg-cc-airshare); }
+.cc-toggle-btn label { font-size: 10px; color: var(--text-secondary); }
+.cc-toggle-btn.active { background: var(--accent-dim); border-color: rgba(34, 211, 238, 0.3); }
+.cc-toggle-btn.active .icon { filter: none; }
+.cc-toggle-btn.active label { color: var(--accent); }
+.cc-toggle-btn.active .icon { background-color: transparent; }
+.cc-toggle-btn.active#cc-silent .icon, .cc-toggle-btn.active#cc-flash .icon { opacity: 1; }
+.cc-toggle-btn:not(.active) .icon { opacity: 0.75; }
+
+/* Sağ: 2 dikey bar (Parlaklık, Zil Sesi) */
+.cc-sliders { flex: 1; display: flex; gap: 10px; }
+.cc-slider-col { flex: 1; display: flex; flex-direction: column; align-items: stretch; gap: 6px; }
+.cc-slider-col label { font-size: 10.5px; color: var(--text-secondary); text-align: center; }
+.cc-vslider {
+  position: relative;
+  flex: 1;
+  min-height: 70px;
+  background: var(--surface-1);
+  border: 1px solid var(--hairline);
+  border-radius: 16px;
+  overflow: hidden;
+  cursor: pointer;
+}
+.cc-vslider-fill {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 60%;
+  background: linear-gradient(180deg, #f1f5f9, #94a3b8);
+}
+.cc-vslider-icon {
+  position: absolute;
+  left: 50%;
+  top: 8px;
+  transform: translateX(-50%);
+  width: 15px;
+  height: 15px;
+  background-color: transparent;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  opacity: 0.9;
+}
+.cc-vslider-icon.icon-cc-brightness { background-image: var(--svg-cc-brightness); }
+.cc-vslider-icon.icon-cc-volume { background-image: var(--svg-cc-volume); }
+
+/* ==========================================================================
+   YARIM EKRAN SHEET (AirShare akışları)
+   ========================================================================== */
+
+.sheet {
+  position: absolute;
+  inset: 0;
+  z-index: 310;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.18s ease;
+}
+.sheet.open { opacity: 1; pointer-events: auto; }
+.sheet-backdrop { position: absolute; inset: 0; background: rgba(0, 0, 0, 0.45); }
+.sheet-panel {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  max-height: 50%;
+  background: var(--screen-bg);
+  border-top: 1px solid var(--hairline);
+  border-radius: 22px 22px 0 0;
+  padding: 10px 16px calc(16px + env(safe-area-inset-bottom, 0px));
+  display: flex;
+  flex-direction: column;
+  transform: translateY(100%);
+  transition: transform 0.2s ease;
+  box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.4);
+}
+.sheet-panel.tall { max-height: 72%; }
+.sheet.open .sheet-panel { transform: none; }
+.sheet-handle { width: 36px; height: 4px; border-radius: 3px; background: var(--hairline); margin: 2px auto 10px; flex-shrink: 0; }
+.sheet-title { font-size: 15px; font-weight: 700; margin: 0 0 10px; text-align: center; flex-shrink: 0; }
+.sheet-option {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: var(--surface-1);
+  border: 1px solid var(--hairline);
+  border-radius: 12px;
+  padding: 12px 14px;
+  margin-bottom: 8px;
+  color: var(--text-primary);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+}
+.sheet-option .icon { width: 20px; height: 20px; background-size: contain; background-repeat: no-repeat; background-position: center; flex-shrink: 0; }
+.sheet-panel .list { overflow-y: auto; flex: 1; }
+.sheet-panel .gallery-grid { overflow-y: auto; flex: 1; padding: 4px 0; }
+
+/* ==========================================================================
+   TOAST BİLDİRİMLERİ
+   ========================================================================== */
+
+#toast-stack {
+  position: fixed;
+  top: 24px;
+  right: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  z-index: 2000;
+}
+.toast {
+  background: rgba(16, 20, 26, 0.92);
+  backdrop-filter: blur(14px);
+  border: 1px solid var(--hairline);
+  border-radius: 12px;
+  padding: 10px 16px;
+  font-size: 13px;
+  color: var(--text-primary);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+  animation: toast-in 0.2s ease;
+  max-width: 280px;
+}
+.toast.success { border-color: rgba(52, 211, 153, 0.4); }
+.toast.error { border-color: rgba(244, 73, 95, 0.4); }
+@keyframes toast-in { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: none; } }
+
+/* ==========================================================================
+   BANKA — "Los Santos Bank" (App Store'dan indirilir)
+   Kendi pembe/mor neon kimliği (bkz --bank-* değişkenleri); telefonun
+   camgöbeği sistem temasından bağımsız, gerçek bir uygulama markası gibi.
+   ========================================================================== */
+
+.bank-app { background: var(--bank-surface); }
+.bank-app .app-header {
+  background: rgba(14, 12, 19, 0.9);
+  border-bottom: 1px solid var(--bank-line);
+}
+.bank-app .back-btn { color: var(--bank-dim); }
+.bank-app .back-btn .chev { background-color: var(--bank-dim); }
+.bank-app h1 { color: var(--bank-text); }
+
+.bank-header-brand { display: flex; align-items: center; justify-content: center; gap: 6px; flex: 1; padding-left: 34px; }
+.bank-header-diamond {
+  width: 16px; height: 16px; flex-shrink: 0;
+  background: linear-gradient(135deg, var(--bank-primary), var(--bank-secondary));
+  background-image: var(--svg-bank-diamond), linear-gradient(135deg, var(--bank-primary), var(--bank-secondary));
+  background-size: 60% 60%, 100% 100%;
+  background-position: center, center;
+  background-repeat: no-repeat, no-repeat;
+  border-radius: 4px;
+}
+.bank-header-brand h1 {
+  font-size: 14px;
+  font-weight: 800;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+}
+.bank-header-brand h1 span { color: var(--bank-primary); }
+
+.bank-app .header-icon-btn { background: rgba(255, 255, 255, 0.06); color: var(--bank-dim); }
+.bank-app .header-icon-btn .icon { opacity: 0.9; }
+
+.bank-scroll { flex: 1; overflow-y: auto; padding: 14px 14px calc(20px + env(safe-area-inset-bottom, 0px)); display: flex; flex-direction: column; gap: 16px; }
+
+/* ---- hesap kartı ---- */
+.bank-card {
+  position: relative;
+  overflow: hidden;
+  padding: 18px;
+  border-radius: 20px;
+  border: 1px solid rgba(255, 46, 151, 0.35);
+  background:
+    radial-gradient(120px 120px at 88% -10%, rgba(255, 46, 151, 0.18), transparent 70%),
+    radial-gradient(100px 100px at -5% 105%, rgba(180, 107, 255, 0.14), transparent 70%),
+    linear-gradient(165deg, #1b1226, var(--bank-surface-2) 55%, var(--bank-surface));
+  box-shadow: 0 10px 30px rgba(255, 46, 151, 0.14);
+}
+.bank-card-top { display: flex; align-items: center; justify-content: space-between; position: relative; z-index: 1; }
+.bank-card-label { display: flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 600; letter-spacing: 0.5px; text-transform: uppercase; color: var(--bank-dim); }
+.bank-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--bank-primary); box-shadow: 0 0 6px var(--bank-primary); }
+.bank-code-pill {
+  display: flex; align-items: center; gap: 6px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 999px;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+.bank-code-pill span:first-child { font-size: 11px; font-weight: 800; letter-spacing: 1.5px; color: var(--bank-text); }
+.bank-code-pill .icon { width: 12px; height: 12px; opacity: 0.7; }
+.bank-code-pill.copied .icon { opacity: 0; }
+.bank-code-pill.copied::after { content: 'Kopyalandı'; font-size: 10px; font-weight: 700; color: var(--bank-gain); }
+
+.bank-balance-label { margin-top: 14px; font-size: 10.5px; font-weight: 600; letter-spacing: 0.5px; text-transform: uppercase; color: var(--bank-faint); position: relative; z-index: 1; }
+.bank-balance { margin-top: 3px; font-size: 34px; font-weight: 800; letter-spacing: -0.5px; color: var(--bank-text); position: relative; z-index: 1; }
+.bank-card.bal-hidden .bank-balance { filter: blur(9px); user-select: none; }
+.bank-card-bottom { margin-top: 14px; padding-top: 12px; border-top: 1px solid rgba(255, 255, 255, 0.08); display: flex; align-items: center; justify-content: space-between; position: relative; z-index: 1; }
+.bank-name { font-size: 11.5px; color: var(--bank-dim); font-weight: 600; }
+.bank-eye-btn { background: none; border: none; color: var(--bank-dim); display: flex; align-items: center; gap: 5px; font-size: 10.5px; cursor: pointer; }
+.bank-eye-btn .icon { width: 14px; height: 14px; opacity: 0.8; }
+
+/* ---- hızlı işlemler ---- */
+.bank-section-title { font-size: 11px; font-weight: 700; letter-spacing: 0.6px; text-transform: uppercase; color: var(--bank-dim); margin-bottom: 10px; }
+.bank-quick-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+.bank-quick-tile {
+  --qc: var(--bank-primary);
+  display: flex; flex-direction: column; align-items: flex-start; gap: 8px;
+  background: var(--bank-surface-2);
+  border: 1px solid var(--bank-line);
+  border-radius: 16px;
+  padding: 13px;
+  cursor: pointer;
+  text-align: left;
+}
+.bank-quick-tile:active { border-color: var(--qc); }
+.bank-quick-icon {
+  width: 36px; height: 36px; border-radius: 11px;
+  display: flex; align-items: center; justify-content: center;
+  background: var(--qc-bg);
+  border: 1px solid var(--qc-line);
+}
+.bank-quick-icon .icon { width: 18px; height: 18px; background-color: var(--qc); }
+.bank-quick-label { font-size: 12.5px; font-weight: 700; color: var(--bank-text); }
+
+/* ---- istatistik çipleri ---- */
+.bank-stats { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 2px; }
+.bank-stat-chip {
+  flex-shrink: 0;
+  display: flex; align-items: center; gap: 6px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--bank-line);
+  border-radius: 999px;
+  padding: 7px 12px;
+  font-size: 11px;
+  color: var(--bank-dim);
+  white-space: nowrap;
+}
+.bank-stat-chip b { color: var(--bank-text); font-weight: 800; }
+.bank-stat-chip b.pos { color: var(--bank-gain); }
+.bank-stat-chip b.neg { color: var(--bank-primary); }
+
+/* ---- bağış bandı ---- */
+.bank-donate-banner {
+  display: flex; align-items: center; gap: 12px;
+  background: linear-gradient(100deg, #1f1124, #120f18);
+  border: 1px solid rgba(255, 46, 151, 0.3);
+  border-radius: 16px;
+  padding: 13px 14px;
+  cursor: pointer;
+  text-align: left;
+}
+.bank-donate-icon {
+  flex-shrink: 0; width: 38px; height: 38px; border-radius: 12px;
+  background: linear-gradient(135deg, rgba(255, 46, 151, 0.22), rgba(180, 107, 255, 0.22));
+  border: 1px solid rgba(255, 46, 151, 0.3);
+  display: flex; align-items: center; justify-content: center;
+}
+.bank-donate-icon .icon { width: 18px; height: 18px; background-color: var(--bank-primary); }
+.bank-donate-text { display: flex; flex-direction: column; gap: 5px; }
+.bank-donate-text b { font-size: 11.5px; font-weight: 800; color: var(--bank-text); letter-spacing: 0.2px; }
+.bank-donate-cta { display: inline-flex; align-items: center; gap: 4px; font-size: 10.5px; font-weight: 700; color: var(--bank-primary); }
+.bank-donate-cta .icon { width: 11px; height: 11px; background-color: var(--bank-primary); }
+
+/* ---- işlem ekranları (Yatır/Çek/Havale/Bağış ortak) ---- */
+.bank-op-desc { font-size: 12.5px; color: var(--bank-dim); line-height: 1.5; margin-bottom: 14px; }
+.bank-flow { display: flex; align-items: center; gap: 10px; margin-bottom: 18px; }
+.bank-flow-leg { flex: 1; background: var(--bank-surface-2); border: 1px solid var(--bank-line); border-radius: 14px; padding: 11px 13px; }
+.bank-flow-leg small { display: block; font-size: 10px; color: var(--bank-faint); margin-bottom: 3px; }
+.bank-flow-leg b { font-size: 14px; color: var(--bank-text); font-weight: 800; }
+.bank-flow-arrow { flex-shrink: 0; width: 26px; height: 26px; border-radius: 50%; background: rgba(255, 255, 255, 0.05); display: flex; align-items: center; justify-content: center; }
+.bank-flow-arrow .icon { width: 14px; height: 14px; background-color: var(--bank-dim); }
+
+.bank-field-label { display: block; font-size: 11px; font-weight: 700; color: var(--bank-dim); text-transform: uppercase; letter-spacing: 0.4px; margin: 14px 0 7px; }
+.bank-field-hint { color: var(--bank-faint); font-weight: 500; text-transform: none; letter-spacing: normal; }
+.bank-amount-wrap { display: flex; align-items: center; gap: 6px; background: var(--bank-surface-2); border: 1px solid var(--bank-line); border-radius: 14px; padding: 12px 14px; }
+.bank-cur { font-size: 20px; font-weight: 800; color: var(--bank-primary); }
+.bank-amount-input { flex: 1; background: none; border: none; color: var(--bank-text); font-size: 22px; font-weight: 800; min-width: 0; }
+.bank-amount-input::placeholder { color: var(--bank-faint); }
+.bank-code-input {
+  width: 100%; background: var(--bank-surface-2); border: 1px solid var(--bank-line); border-radius: 14px;
+  padding: 12px 14px; color: var(--bank-text); font-size: 15px; font-weight: 800; letter-spacing: 3px;
+  text-transform: uppercase; text-align: center;
+}
+.bank-code-input::placeholder { color: var(--bank-faint); letter-spacing: 3px; }
+.bank-text-input {
+  width: 100%; background: var(--bank-surface-2); border: 1px solid var(--bank-line); border-radius: 14px;
+  padding: 11px 14px; color: var(--bank-text); font-size: 13px;
+}
+.bank-text-input::placeholder { color: var(--bank-faint); }
+
+.bank-chip-row { display: flex; gap: 7px; margin-top: 10px; flex-wrap: wrap; }
+.bank-chip-btn {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--bank-line);
+  border-radius: 999px;
+  padding: 6px 12px;
+  font-size: 11.5px;
+  font-weight: 700;
+  color: var(--bank-dim);
+  cursor: pointer;
+}
+.bank-chip-btn:active, .bank-chip-btn.max {
+  background: rgba(255, 46, 151, 0.14);
+  border-color: rgba(255, 46, 151, 0.4);
+  color: var(--bank-primary);
+}
+
+.bank-fee-row { display: flex; align-items: center; justify-content: space-between; margin-top: 14px; font-size: 12px; color: var(--bank-dim); }
+.bank-fee-row b { color: var(--bank-text); font-weight: 800; }
+
+.bank-submit-btn {
+  width: 100%;
+  margin-top: 20px;
+  padding: 14px;
+  border: none;
+  border-radius: 16px;
+  background: var(--bank-primary);
+  color: white;
+  font-size: 14px;
+  font-weight: 800;
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+  cursor: pointer;
+  box-shadow: 0 8px 20px rgba(255, 46, 151, 0.3);
+}
+.bank-submit-btn:disabled { opacity: 0.4; box-shadow: none; cursor: default; }
+.bank-op-hint { margin-top: 10px; font-size: 12px; text-align: center; min-height: 15px; }
+.bank-op-hint.err { color: var(--bank-primary); }
+.bank-op-hint.ok { color: var(--bank-gain); }
+
+/* ---- son işlemler listesi ---- */
+.bank-tx-list { padding: 6px 14px 20px; }
+.bank-tx-row {
+  display: flex; align-items: center; gap: 11px;
+  padding: 11px 0;
+  border-bottom: 1px solid var(--bank-line);
+}
+.bank-tx-icon {
+  flex-shrink: 0; width: 34px; height: 34px; border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  background: var(--cat-bg, rgba(180, 107, 255, 0.16));
+}
+.bank-tx-icon .icon { width: 16px; height: 16px; background-color: var(--cat, var(--bank-secondary)); }
+.bank-tx-main { flex: 1; min-width: 0; }
+.bank-tx-title { font-size: 12.5px; font-weight: 700; color: var(--bank-text); }
+.bank-tx-sub { font-size: 11px; color: var(--bank-faint); margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.bank-tx-right { flex-shrink: 0; text-align: right; }
+.bank-tx-amt { font-size: 12.5px; font-weight: 800; }
+.bank-tx-amt.pos { color: var(--bank-gain); }
+.bank-tx-amt.neg { color: var(--bank-primary); }
+.bank-tx-when { font-size: 10px; color: var(--bank-faint); margin-top: 2px; }
+
+/* ==========================================================================
+   LIFEGRAM (App Store'dan indirilir) — fotoğraf paylaşım/sosyal medya uygulaması.
+   Tek aksan rengi mercan (--social-primary); zemin telefonun global koyu
+   temasıyla zaten uyumlu olduğu için ayrı bir yüzey paleti TANIMLANMAZ.
+   ========================================================================== */
+
+.social-app { display: flex; flex-direction: column; }
+
+/* ---- ortak: üst bar / kaydırılabilir içerik / ikon buton ---- */
+.social-topbar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 14px 8px;
+  flex-shrink: 0;
+}
+.social-topbar .back-btn { flex-shrink: 0; }
+.social-topbar h1 { flex: 1; font-size: 17px; font-weight: 700; margin: 0; }
+.social-wordmark { flex: 1; font-size: 21px; font-weight: 800; margin: 0; letter-spacing: -0.02em; }
+.social-topbar-search { align-items: center; }
+.social-search-bar { flex: 1; margin: 0; }
+
+.social-icon-btn {
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0;
+  background: none;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  border-radius: 50%;
+  position: relative;
+}
+.social-icon-btn:active { background: rgba(255, 255, 255, 0.08); }
+.social-icon-btn .icon { width: 21px; height: 21px; }
+.social-icon-btn .social-dot {
+  position: absolute; top: 4px; right: 5px;
+  width: 8px; height: 8px; border-radius: 50%;
+  background: var(--social-primary);
+  box-shadow: 0 0 0 2px var(--screen-bg);
+}
+
+.social-scroll { flex: 1; overflow-y: auto; padding-bottom: 12px; }
+
+/* ---- görsel özel avatar (gerçek fotoğraf, telefonun metin-baş harfli .avatar'ından bağımsız) ---- */
+.social-avatar {
+  border-radius: 50%;
+  object-fit: cover;
+  background: var(--surface-2);
+  flex-shrink: 0;
+  display: block;
+}
+
+/* ---- kabuk: 4 sekme + alt nav ---- */
+.social-tabs-content { flex: 1; min-height: 0; display: flex; }
+.social-tab-panel { flex: 1; min-width: 0; display: none; flex-direction: column; }
+.social-tab-panel.active { display: flex; }
+
+.social-bottom-nav {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  padding: 8px 8px calc(6px + env(safe-area-inset-bottom, 0px));
+  border-top: 1px solid var(--social-line);
+  background: rgba(10, 13, 18, 0.85);
+  backdrop-filter: blur(10px);
+}
+.social-nav-btn {
+  background: none;
+  border: none;
+  padding: 6px 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  cursor: pointer;
+  opacity: 0.5;
+}
+.social-nav-btn.active { opacity: 1; }
+.social-nav-btn .icon { width: 24px; height: 24px; }
+.social-nav-btn .badge {
+  position: absolute; top: 2px; right: 8px;
+  min-width: 8px; height: 8px; padding: 0;
+  border-radius: 50%; background: var(--social-primary);
+  box-shadow: 0 0 0 2px #05070a;
+}
+.social-nav-avatar { width: 24px; height: 24px; border: none; }
+.social-nav-btn.active .social-nav-avatar { box-shadow: 0 0 0 2px var(--text-primary); border-radius: 50%; }
+
+/* ---- hikaye şeridi ---- */
+.social-stories {
+  display: flex;
+  gap: 14px;
+  overflow-x: auto;
+  padding: 10px 14px 14px;
+  border-bottom: 1px solid var(--social-line);
+}
+.social-story-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  flex-shrink: 0;
+  width: 62px;
+  cursor: pointer;
+  background: none; border: none;
+}
+.social-story-ring {
+  width: 58px; height: 58px; border-radius: 50%;
+  padding: 2.5px;
+  background: linear-gradient(135deg, var(--social-grad-1), var(--social-grad-2), var(--social-grad-3));
+  display: flex; align-items: center; justify-content: center;
+  position: relative;
+}
+.social-story-ring.seen { background: var(--text-tertiary); opacity: 0.5; }
+.social-story-ring.self { background: var(--surface-2); }
+.social-story-ring .social-avatar { width: 100%; height: 100%; border: 2px solid var(--screen-bg); }
+.social-story-add-badge {
+  position: absolute; bottom: -1px; right: -1px;
+  width: 18px; height: 18px; border-radius: 50%;
+  background: var(--social-primary);
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 0 0 2px var(--screen-bg);
+}
+.social-story-add-badge .icon { width: 11px; height: 11px; }
+.social-story-item label { font-size: 11px; color: var(--text-secondary); max-width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; cursor: pointer; }
+
+/* ---- gönderi kartı ---- */
+.social-post { padding: 12px 0 18px; }
+.social-post-header { display: flex; align-items: center; gap: 10px; padding: 0 14px 8px; }
+.social-post-header .social-avatar { width: 32px; height: 32px; }
+.social-post-user { flex: 1; min-width: 0; }
+.social-post-username { font-size: 13.5px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; cursor: pointer; }
+.social-post-location { font-size: 11.5px; color: var(--text-secondary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.social-post-more { background: none; border: none; width: 28px; height: 28px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; cursor: pointer; }
+.social-post-more .icon { width: 18px; height: 18px; opacity: 0.75; }
+
+.social-post-media { width: 100%; aspect-ratio: 4 / 5; background: var(--surface-1); overflow: hidden; }
+.social-post-media img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+.social-post-actions { display: flex; align-items: center; padding: 10px 12px 2px; gap: 4px; }
+.social-action-btn { background: none; border: none; width: 34px; height: 34px; display: flex; align-items: center; justify-content: center; cursor: pointer; }
+.social-action-btn .icon { width: 24px; height: 24px; }
+.social-action-btn.liked .icon { animation: social-pop 0.25s ease; }
+@keyframes social-pop { 0% { transform: scale(1); } 35% { transform: scale(1.25); } 100% { transform: scale(1); } }
+.social-post-actions-right { margin-left: auto; }
+
+.social-post-likes { padding: 0 14px 4px; font-size: 13px; display: flex; align-items: center; gap: 6px; }
+.social-post-likes b { font-weight: 700; }
+.social-post-caption { padding: 0 14px 4px; font-size: 13.5px; line-height: 1.4; }
+.social-post-caption b { font-weight: 600; margin-right: 5px; }
+.social-post-caption .more { color: var(--text-tertiary); }
+.social-post-comments-link { padding: 0 14px 4px; font-size: 12.5px; color: var(--text-tertiary); cursor: pointer; }
+.social-post-time { padding: 2px 14px 0; font-size: 10.5px; color: var(--text-tertiary); text-transform: uppercase; letter-spacing: 0.02em; }
+
+.social-load-more {
+  display: block; margin: 4px auto 20px; padding: 9px 20px;
+  border-radius: 20px; border: 1px solid var(--social-line);
+  background: none; color: var(--text-secondary); font-size: 13px; cursor: pointer;
+}
+
+/* ---- keşfet ızgarası ---- */
+.social-explore-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2px;
+  padding: 2px;
+}
+.social-explore-tile {
+  position: relative;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  background: var(--surface-1);
+  cursor: pointer;
+}
+.social-explore-tile img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.social-explore-tile .social-explore-stat {
+  position: absolute; left: 6px; bottom: 6px;
+  display: flex; align-items: center; gap: 3px;
+  font-size: 11px; font-weight: 600; color: #fff;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
+}
+.social-explore-tile .social-explore-stat .icon { width: 13px; height: 13px; }
+
+/* ---- profil ---- */
+.social-profile-header { display: flex; align-items: center; gap: 18px; padding: 14px 14px 4px; }
+.social-profile-header .social-avatar { width: 84px; height: 84px; flex-shrink: 0; }
+.social-profile-header .social-avatar.has-ring {
+  padding: 3px;
+  background: linear-gradient(135deg, var(--social-grad-1), var(--social-grad-2), var(--social-grad-3));
+  box-sizing: border-box;
+}
+.social-profile-stats { flex: 1; display: flex; justify-content: space-around; }
+.social-profile-stat { display: flex; flex-direction: column; align-items: center; gap: 2px; cursor: default; }
+.social-profile-stat b { font-size: 17px; font-weight: 700; }
+.social-profile-stat span { font-size: 11.5px; color: var(--text-secondary); }
+
+.social-profile-name { padding: 10px 14px 0; font-size: 13.5px; font-weight: 700; }
+.social-profile-bio { padding: 4px 14px 0; font-size: 13px; color: var(--text-secondary); line-height: 1.4; white-space: pre-line; }
+
+.social-profile-actions { display: flex; gap: 8px; padding: 12px 14px 6px; }
+.social-profile-btn {
+  flex: 1; border: none; border-radius: 10px; padding: 8px 10px;
+  font-size: 13px; font-weight: 600; cursor: pointer;
+  background: var(--surface-2); color: var(--text-primary);
+}
+.social-profile-btn.primary { background: var(--social-primary); color: #fff; }
+.social-profile-btn.following { background: var(--surface-2); color: var(--text-primary); }
+
+.social-profile-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2px;
+  padding: 10px 2px 20px;
+}
+.social-profile-grid .social-explore-tile { aspect-ratio: 1 / 1; }
+.social-profile-empty { text-align: center; color: var(--text-tertiary); font-size: 13px; padding: 30px; }
+
+/* ---- profil düzenle / ilk açılış (form ortak) ---- */
+.social-onboard { padding: 60px 26px 20px; text-align: center; }
+.social-onboard-glyph {
+  width: 64px; height: 64px; margin: 0 auto 18px; border-radius: 20px;
+  background-image: var(--svg-lifegram-glyph), linear-gradient(45deg, var(--social-grad-3), var(--social-grad-2), var(--social-grad-1));
+  background-size: 46% 46%, 100% 100%;
+  background-position: center, center;
+  background-repeat: no-repeat, no-repeat;
+}
+.social-onboard-title { font-size: 19px; font-weight: 800; margin: 0 0 6px; }
+.social-onboard-sub { font-size: 13px; color: var(--text-secondary); margin: 0 0 24px; line-height: 1.4; }
+.social-onboard-hint { font-size: 12px; color: var(--danger); min-height: 16px; margin-top: 10px; }
+
+.social-edit-form { padding: 18px 20px 30px; }
+.social-edit-avatar-btn {
+  display: flex; flex-direction: column; align-items: center; gap: 8px;
+  margin: 0 auto 24px; background: none; border: none; cursor: pointer;
+}
+.social-edit-avatar-btn img { width: 84px; height: 84px; border-radius: 50%; object-fit: cover; background: var(--surface-2); }
+.social-edit-avatar-label { font-size: 12.5px; color: var(--social-primary); font-weight: 600; }
+
+.social-field-label { display: block; font-size: 11.5px; color: var(--text-tertiary); text-transform: uppercase; letter-spacing: 0.03em; margin: 16px 0 6px; }
+.social-field {
+  display: flex; align-items: center; gap: 6px;
+  background: var(--surface-1); border: 1px solid var(--hairline); border-radius: 10px;
+  padding: 10px 12px;
+}
+.social-field .icon { width: 16px; height: 16px; opacity: 0.6; flex-shrink: 0; }
+.social-field-prefix { color: var(--text-tertiary); font-size: 14px; }
+.social-field input {
+  flex: 1; background: none; border: none; outline: none;
+  color: var(--text-primary); font-size: 14px;
+}
+.social-field input::placeholder { color: var(--text-tertiary); }
+.social-bio-input, .social-caption-input {
+  width: 100%; min-height: 70px; resize: none;
+  background: var(--surface-1); border: 1px solid var(--hairline); border-radius: 10px;
+  padding: 10px 12px; color: var(--text-primary); font-size: 13.5px; font-family: inherit;
+  outline: none; box-sizing: border-box; margin-top: 4px;
+}
+.social-bio-input::placeholder, .social-caption-input::placeholder { color: var(--text-tertiary); }
+
+.social-primary-btn {
+  width: 100%; margin-top: 20px; padding: 12px; border: none; border-radius: 12px;
+  background: var(--social-primary); color: #fff; font-size: 14.5px; font-weight: 700; cursor: pointer;
+}
+.social-primary-btn:disabled { opacity: 0.45; }
+
+/* ---- yeni paylaşım ---- */
+.social-post-type { margin: 10px 14px 14px; }
+.social-pick-photo-btn {
+  display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 8px;
+  width: calc(100% - 28px); margin: 0 14px 14px;
+  aspect-ratio: 4 / 5; max-height: 260px;
+  border: 1.5px dashed var(--hairline); border-radius: 14px;
+  background: var(--surface-1); cursor: pointer; overflow: hidden;
+}
+.social-pick-photo-btn img { width: 100%; height: 100%; object-fit: cover; }
+.social-pick-photo-label { font-size: 13px; color: var(--text-secondary); }
+.social-post-fields { padding: 0 14px 20px; display: flex; flex-direction: column; gap: 10px; }
+
+/* ---- mesajlar / sohbet ---- */
+.social-chat-avatar { width: 30px; height: 30px; border-radius: 50%; object-fit: cover; background: var(--surface-2); }
+.social-chat-messages { flex: 1; overflow-y: auto; padding: 12px 14px; display: flex; flex-direction: column; gap: 3px; }
+.social-chat-day { text-align: center; font-size: 11px; color: var(--text-tertiary); margin: 10px 0; }
+.social-chat-bubble { max-width: 78%; padding: 9px 13px; border-radius: 16px; font-size: 14px; line-height: 1.35; margin: 2px 0; }
+.social-chat-bubble.in { align-self: flex-start; background: var(--surface-2); border-bottom-left-radius: 4px; }
+.social-chat-bubble.out { align-self: flex-end; background: var(--social-primary); color: #fff; border-bottom-right-radius: 4px; }
+.social-chat-seen { align-self: flex-end; font-size: 10px; color: var(--text-tertiary); margin: 0 2px 6px; }
+.social-chat-shared {
+  align-self: flex-end; width: 68%; max-width: 220px;
+  background: var(--surface-2); border-radius: 14px; overflow: hidden; cursor: pointer; margin: 2px 0;
+}
+.social-chat-shared.in { align-self: flex-start; }
+.social-chat-shared-head { display: flex; align-items: center; gap: 6px; padding: 8px 10px 0; font-size: 11.5px; font-weight: 600; }
+.social-chat-shared-head .social-avatar { width: 16px; height: 16px; }
+.social-chat-shared img { width: 100%; aspect-ratio: 1/1; object-fit: cover; display: block; margin-top: 6px; }
+.social-chat-shared-foot { padding: 6px 10px; font-size: 10.5px; color: var(--text-tertiary); }
+.social-chat-input-row {
+  flex-shrink: 0; display: flex; align-items: center; gap: 8px;
+  padding: 8px 12px calc(10px + env(safe-area-inset-bottom, 0px));
+  border-top: 1px solid var(--social-line);
+}
+.social-chat-input-row input {
+  flex: 1; background: var(--surface-1); border: 1px solid var(--hairline); border-radius: 20px;
+  padding: 9px 14px; color: var(--text-primary); font-size: 13.5px; outline: none;
+}
+
+/* ---- yorumlar (sheet) ---- */
+.social-comments-panel { padding-bottom: 0; }
+.social-comments-list { flex: 1; overflow-y: auto; padding: 4px 2px; }
+.social-comment-row { display: flex; gap: 10px; padding: 9px 6px; }
+.social-comment-row .social-avatar { width: 30px; height: 30px; flex-shrink: 0; }
+.social-comment-main { flex: 1; min-width: 0; }
+.social-comment-head { font-size: 13px; }
+.social-comment-head b { font-weight: 600; margin-right: 6px; }
+.social-comment-time { color: var(--text-tertiary); font-size: 11px; margin-left: 6px; }
+.social-comment-body { font-size: 13.5px; margin-top: 2px; line-height: 1.35; }
+.social-comment-reply { font-size: 11.5px; color: var(--text-tertiary); margin-top: 4px; }
+.social-comment-like { background: none; border: none; display: flex; flex-direction: column; align-items: center; gap: 2px; flex-shrink: 0; cursor: pointer; padding: 2px 4px; }
+.social-comment-like .icon { width: 15px; height: 15px; }
+.social-comment-like span { font-size: 10.5px; color: var(--text-tertiary); }
+.social-comment-input-row {
+  display: flex; align-items: center; gap: 8px; padding: 10px 12px calc(12px + env(safe-area-inset-bottom, 0px));
+  border-top: 1px solid var(--social-line); flex-shrink: 0;
+}
+.social-comment-input-row input {
+  flex: 1; background: var(--surface-1); border: 1px solid var(--hairline); border-radius: 20px;
+  padding: 9px 14px; color: var(--text-primary); font-size: 13.5px; outline: none;
+}
+.social-comment-send { background: none; border: none; color: var(--social-primary); font-weight: 700; font-size: 13.5px; cursor: pointer; flex-shrink: 0; }
+.social-comment-send:disabled { opacity: 0.4; }
+
+/* ---- hikaye görüntüleyici (tam ekran) ---- */
+.social-story-viewer {
+  position: absolute; inset: 0; z-index: 60;
+  background: #000; display: flex; flex-direction: column;
+  opacity: 0; pointer-events: none; transition: opacity 0.15s ease;
+}
+.social-story-viewer:not([hidden]) { opacity: 1; pointer-events: auto; }
+.social-story-segments { display: flex; gap: 4px; padding: 10px 10px 0; flex-shrink: 0; }
+.social-story-segments .seg { flex: 1; height: 2.5px; border-radius: 2px; background: rgba(255, 255, 255, 0.3); overflow: hidden; }
+.social-story-segments .seg .fill { height: 100%; width: 0%; background: #fff; }
+.social-story-segments .seg.done .fill { width: 100%; }
+.social-story-header { display: flex; align-items: center; gap: 8px; padding: 8px 12px; flex-shrink: 0; }
+.social-story-header .social-story-avatar { width: 30px; height: 30px; border-radius: 50%; object-fit: cover; }
+.social-story-username { font-size: 13.5px; font-weight: 600; color: #fff; }
+.social-story-time { font-size: 12px; color: rgba(255, 255, 255, 0.6); margin-left: 2px; }
+.social-story-close { margin-left: auto; background: none; border: none; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; cursor: pointer; }
+.social-story-close .icon { width: 18px; height: 18px; }
+.social-story-photo { flex: 1; width: 100%; object-fit: cover; min-height: 0; }
+.social-story-tapzone { position: absolute; top: 40px; bottom: 60px; width: 33%; }
+.social-story-tapzone.left { left: 0; }
+.social-story-tapzone.right { right: 0; }
+.social-story-footer { display: flex; align-items: center; gap: 10px; padding: 10px 12px calc(12px + env(safe-area-inset-bottom, 0px)); flex-shrink: 0; }
+.social-story-reply-input {
+  flex: 1; background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 20px; padding: 9px 14px; color: #fff; font-size: 13.5px; outline: none;
+}
+.social-story-reply-input::placeholder { color: rgba(255, 255, 255, 0.6); }
+.social-story-reply-send { background: none; border: none; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; cursor: pointer; }
+.social-story-reply-send .icon { width: 20px; height: 20px; }
+
+/* ==========================================================================
+   LIFEGRAM (ayrı resource — iframe olarak gömülü)
+   Uygulama kendi üst barıyla başlar; durum çubuğu payını .app-view veriyor.
+   ========================================================================== */
+
+.lifegram-app {
+  padding-top: 46px;
+  background: #131315;
+}
+
+.lifegram-app iframe {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  background: #131315;
+  color-scheme: dark;
+}

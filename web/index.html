@@ -1,0 +1,950 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>loe_telephone</title>
+<link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+<div id="phone-root">
+  <div class="phone-frame">
+    <!-- gövde yan tuşları (dekoratif) -->
+    <div class="side-btn action-btn" title="Aksiyon Tuşu"></div>
+    <div class="side-btn vol-up"></div>
+    <div class="side-btn vol-down"></div>
+    <div class="side-btn power-btn"></div>
+
+    <div class="screen">
+
+      <!-- ============ DURUM ÇUBUĞU ============ -->
+      <div class="status-bar">
+        <span class="status-time" id="status-time">--:--</span>
+        <div class="dynamic-island" id="dynamic-island">
+          <span class="island-lens"></span>
+          <span class="island-line" id="island-line" hidden></span>
+          <span class="island-sensor"></span>
+        </div>
+        <button class="status-icons" id="btn-control-center" type="button" aria-label="Kontrol Merkezi">
+          <svg viewBox="0 0 18 12" class="i-signal"><rect x="0" y="7" width="3" height="5" rx="0.5"/><rect x="5" y="5" width="3" height="7" rx="0.5"/><rect x="10" y="3" width="3" height="9" rx="0.5"/><rect x="15" y="0" width="3" height="12" rx="0.5"/></svg>
+          <svg viewBox="0 0 16 12" class="i-wifi"><path d="M8 10.5a1.2 1.2 0 1 1 0-2.4 1.2 1.2 0 0 1 0 2.4Zm-3.2-3.6a4.6 4.6 0 0 1 6.4 0 .6.6 0 0 1-.85.85 3.4 3.4 0 0 0-4.7 0 .6.6 0 0 1-.85-.85Zm-2.3-2.3a8 8 0 0 1 11 0 .6.6 0 1 1-.83.87 6.8 6.8 0 0 0-9.34 0 .6.6 0 0 1-.83-.87Z"/></svg>
+          <svg viewBox="0 0 25 12" class="i-battery"><rect x="0.5" y="0.5" width="21" height="11" rx="2.5" fill="none" stroke="currentColor"/><rect x="2" y="2" width="18" height="8" rx="1.3" fill="currentColor"/><rect x="22.5" y="4" width="2" height="4" rx="1" fill="currentColor"/></svg>
+        </button>
+      </div>
+
+      <!-- ============ ANA EKRAN ============ -->
+      <section class="screen-view" data-view="home" id="view-home">
+        <div class="app-grid" id="app-grid">
+          <button class="app-icon" data-open="phone"><span class="icon icon-phone"></span><label>Telefon</label></button>
+          <button class="app-icon" data-open="messages"><span class="icon icon-messages"></span><label>Mesajlar</label><span class="badge" id="badge-messages" hidden></span></button>
+          <button class="app-icon" data-open="contacts"><span class="icon icon-contacts"></span><label>Rehber</label></button>
+          <button class="app-icon" data-open="gallery"><span class="icon icon-gallery"></span><label>Galeri</label></button>
+          <button class="app-icon" id="home-icon-settings" data-open="settings"><span class="icon icon-settings"></span><label>Ayarlar</label></button>
+          <button class="app-icon" id="home-icon-camera" data-open="camera"><span class="icon icon-camera"></span><label>Kamera</label></button>
+          <button class="app-icon" id="home-icon-appstore" data-open="appstore"><span class="icon icon-appstore"></span><label>App Store</label></button>
+        </div>
+        <div class="context-menu" id="app-context-menu" hidden>
+          <button id="context-menu-remove">Kaldır</button>
+        </div>
+        <div class="dock">
+          <button class="app-icon dock-icon" data-open="phone"><span class="icon icon-phone"></span></button>
+          <button class="app-icon dock-icon" data-open="messages"><span class="icon icon-messages"></span></button>
+          <button class="app-icon dock-icon" data-open="settings"><span class="icon icon-settings"></span></button>
+          <button class="app-icon dock-icon" data-open="camera"><span class="icon icon-camera"></span></button>
+        </div>
+      </section>
+
+      <!-- ============ TELEFON (ARAMA) ============ -->
+      <section class="screen-view app-view" data-view="phone" id="view-phone">
+        <header class="app-header">
+          <button class="back-btn" data-back="home" aria-label="Ana Ekran"><span class="chev"></span></button>
+          <h1>Telefon</h1>
+        </header>
+        <div class="segmented" id="phone-tabs">
+          <button class="seg-btn active" data-tab="keypad">Tuş Takımı</button>
+          <button class="seg-btn" data-tab="recents">Son Aramalar</button>
+        </div>
+        <div class="tab-panel" data-tab-panel="keypad" id="tab-keypad">
+          <div class="dial-display" id="dial-display"></div>
+          <div class="dial-contact-name" id="dial-contact-name"></div>
+          <div class="keypad" id="keypad"></div>
+          <div class="keypad-actions">
+            <div class="key-spacer"></div>
+            <button class="call-fab" id="btn-dial"><span class="icon icon-call"></span></button>
+            <button class="key-btn key-del" id="keypad-del" aria-label="Sil">⌫</button>
+          </div>
+        </div>
+        <div class="tab-panel hidden" data-tab-panel="recents" id="tab-recents">
+          <ul class="list" id="call-history-list"></ul>
+        </div>
+      </section>
+
+      <!-- ============ MESAJLAR — SOHBET LİSTESİ ============ -->
+      <section class="screen-view app-view" data-view="messages" id="view-messages">
+        <header class="app-header">
+          <button class="back-btn" data-back="home" aria-label="Ana Ekran"><span class="chev"></span></button>
+          <h1>Mesajlar</h1>
+          <button class="header-action" id="btn-new-message" aria-label="Yeni mesaj"><span class="icon icon-plus"></span></button>
+        </header>
+        <ul class="list" id="threads-list"></ul>
+        <p class="empty-hint" id="threads-empty" hidden>Henüz konuşma yok.</p>
+      </section>
+
+      <!-- ============ MESAJLAR — YENİ MESAJ ============ -->
+      <section class="screen-view app-view" data-view="new-message" id="view-new-message">
+        <header class="app-header">
+          <button class="back-btn" data-back="messages"><span class="chev"></span>Mesajlar</button>
+          <h1>Yeni Mesaj</h1>
+        </header>
+        <div class="segmented" id="new-message-tabs">
+          <button class="seg-btn active" data-nm-tab="rehber" type="button">Rehber</button>
+          <button class="seg-btn" data-nm-tab="numara" type="button">Numara</button>
+        </div>
+        <div class="nm-panel" data-nm-panel="rehber" id="nm-panel-rehber">
+          <div class="search-bar">
+            <span class="icon icon-search"></span>
+            <input type="text" id="new-message-contact-search" placeholder="Kişi ara…" />
+          </div>
+          <ul class="list" id="new-message-contacts-list"></ul>
+          <p class="empty-hint" id="new-message-contacts-empty" hidden>Rehberin boş.</p>
+        </div>
+        <div class="nm-panel hidden" data-nm-panel="numara" id="nm-panel-numara">
+          <div class="invite-join-row">
+            <input type="text" id="new-message-number-input" maxlength="8" placeholder="Numara gir (12345678)" />
+            <button class="primary-btn small" id="new-message-number-go" type="button">Mesaj Yaz</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ MESAJLAR — SOHBET ============ -->
+      <section class="screen-view app-view" data-view="thread" id="view-thread">
+        <header class="app-header">
+          <button class="back-btn" data-back="messages"><span class="chev"></span>Mesajlar</button>
+          <h1 id="thread-title">—</h1>
+        </header>
+        <div class="thread-messages" id="thread-messages"></div>
+        <div class="attach-menu" id="thread-attach-menu">
+          <button class="attach-menu-item" id="thread-attach-location" type="button"><span class="icon icon-location"></span>Canlı Konum Paylaş</button>
+          <button class="attach-menu-item" id="thread-attach-photo" type="button"><span class="icon icon-photo"></span>Fotoğraf</button>
+        </div>
+        <div class="thread-compose">
+          <button class="attach-btn" id="thread-attach-btn" type="button" aria-label="Ekle"><span class="icon icon-plus"></span></button>
+          <input type="text" id="thread-input" maxlength="400" placeholder="Mesaj yaz…" />
+          <button id="thread-send" class="send-btn" type="button" aria-label="Gönder"><span class="icon icon-send"></span></button>
+        </div>
+      </section>
+
+      <!-- ============ MESAJLAR — SOHBETTE FOTOĞRAF SEÇ ============ -->
+      <div class="sheet" id="thread-photo-sheet">
+        <div class="sheet-backdrop" id="thread-photo-backdrop"></div>
+        <div class="sheet-panel tall">
+          <div class="sheet-handle"></div>
+          <h2 class="sheet-title">Fotoğraf Seç</h2>
+          <div class="gallery-grid" id="thread-photo-grid"></div>
+          <p class="empty-hint" id="thread-photo-empty" hidden>Galeri boş.</p>
+        </div>
+      </div>
+
+      <!-- ============ REHBER ============ -->
+      <section class="screen-view app-view" data-view="contacts" id="view-contacts">
+        <header class="app-header">
+          <button class="back-btn" data-back="home" aria-label="Ana Ekran"><span class="chev"></span></button>
+          <h1>Rehber</h1>
+          <button class="header-action" id="btn-new-contact">Ekle</button>
+        </header>
+        <div class="search-bar">
+          <span class="icon icon-search"></span>
+          <input type="text" id="contact-search" placeholder="Kişi ara…" />
+        </div>
+        <ul class="list" id="contacts-list"></ul>
+        <p class="empty-hint" id="contacts-empty" hidden>Rehberin boş.</p>
+      </section>
+
+      <!-- ============ REHBER — EKLE/DÜZENLE FORMU ============ -->
+      <section class="screen-view app-view" data-view="contact-form" id="view-contact-form">
+        <header class="app-header">
+          <button class="back-btn" data-back="contacts"><span class="chev"></span>Rehber</button>
+          <h1 id="contact-form-title">Yeni Kişi</h1>
+        </header>
+        <div class="form">
+          <label>İsim</label>
+          <input type="text" id="contact-name" maxlength="32" placeholder="Ad Soyad" />
+          <label>Numara</label>
+          <input type="text" id="contact-number" maxlength="8" placeholder="12345678" />
+          <button class="primary-btn" id="contact-save">Kaydet</button>
+          <button class="danger-btn" id="contact-delete" hidden>Kişiyi Sil</button>
+        </div>
+      </section>
+
+      <!-- ============ KAMERA ============
+           GTA Online'daki gibi TAM EKRAN açılır: telefon gizlenir, kadraj
+           sayfa sonundaki #camera-overlay'de çizilir. Bu bölüm yalnızca
+           switchView kayıt tutması için boş durur. -->
+      <section class="screen-view app-view camera-app" data-view="camera" id="view-camera"></section>
+
+      <!-- ============ GALERİ ============ -->
+      <section class="screen-view app-view" data-view="gallery" id="view-gallery">
+        <header class="app-header">
+          <button class="back-btn" data-back="home" aria-label="Ana Ekran"><span class="chev"></span></button>
+          <h1>Galeri</h1>
+          <button class="header-action" id="btn-new-photo">Ekle</button>
+        </header>
+        <div class="gallery-grid" id="gallery-grid"></div>
+        <p class="empty-hint" id="gallery-empty" hidden>Henüz fotoğraf veya video yok. "Ekle" ile çek.</p>
+      </section>
+
+      <!-- ============ GALERİ — FOTOĞRAF DETAY ============ -->
+      <section class="screen-view app-view photo-view" data-view="photo" id="view-photo">
+        <header class="app-header">
+          <button class="back-btn" data-back="gallery"><span class="chev"></span>Galeri</button>
+          <h1 id="photo-view-title">Fotoğraf</h1>
+          <button class="header-icon-btn" id="photo-delete" title="Sil"><span class="icon icon-trash"></span></button>
+        </header>
+        <div class="photo-view-img">
+          <img id="photo-view-image" src="" alt="Fotoğraf" />
+          <video id="photo-view-video" controls loop playsinline hidden></video>
+        </div>
+        <div class="photo-view-caption">
+          <input type="text" id="photo-caption-input" maxlength="120" placeholder="Açıklama ekle…" />
+        </div>
+      </section>
+
+      <!-- ============ AYARLAR — HAT DEĞİŞTİR (ana ekrandaki SIM rozetinden) ============ -->
+      <section class="screen-view app-view" data-view="settings" id="view-settings">
+        <header class="app-header">
+          <button class="back-btn" data-back="home" aria-label="Ana Ekran"><span class="chev"></span></button>
+          <h1>Hatlarım</h1>
+        </header>
+        <div class="settings-section">
+          <h2>Hatlarım</h2>
+          <ul class="list" id="lines-list"></ul>
+          <p class="empty-hint" id="lines-empty" hidden>Henüz bir hattın yok. 7/24 markette SIM kart al.</p>
+          <p class="hint-text">Aynı anda yalnızca 1 hat aktif olabilir. En fazla <span id="max-lines">3</span> hat taşıyabilirsin.</p>
+        </div>
+      </section>
+
+      <!-- ============ LIFEGRAM (App Store'dan indirilir) ============
+           React/TypeScript ile yazılmış ayrı bir resource; buraya iframe olarak
+           gömülür. Veri erişimi postMessage RPC ile bu sayfa üzerinden gider
+           (app.js -> lifegramHostBridge), böylece Lifegram bu telefonun zaten
+           kayıtlı `social*` NUI callback'lerini kullanır ve
+           `loe_lifegram` API'sine ulaşır. -->
+      <section class="screen-view app-view lifegram-app" data-view="lifegram" id="view-lifegram">
+        <!-- src ilk açılışta atanır (app.js -> openLifegram): telefon her
+             başladığında React uygulamasını boşuna yüklemeyelim. -->
+        <iframe
+          id="lifegram-frame"
+          title="Lifegram"
+          data-src="nui://loe_lifegram/web/dist/index.html"
+        ></iframe>
+      </section>
+
+      <!-- ============ APP STORE ============ -->
+      <section class="screen-view app-view" data-view="appstore" id="view-appstore">
+        <header class="app-header">
+          <button class="back-btn" data-back="home" aria-label="Ana Ekran"><span class="chev"></span></button>
+          <h1>App Store</h1>
+        </header>
+        <ul class="list" id="store-list"></ul>
+      </section>
+
+      <!-- ============ HESAP MAKİNESİ (App Store'dan indirilir) ============ -->
+      <section class="screen-view app-view" data-view="calculator" id="view-calculator">
+        <header class="app-header">
+          <button class="back-btn" data-back="home" aria-label="Ana Ekran"><span class="chev"></span></button>
+          <h1>Hesap Makinesi</h1>
+        </header>
+        <div class="calc-display" id="calc-display">0</div>
+        <div class="calc-grid" id="calc-grid"></div>
+      </section>
+
+      <!-- ============ NOTLAR (App Store'dan indirilir) ============ -->
+      <section class="screen-view app-view" data-view="notes" id="view-notes">
+        <header class="app-header">
+          <button class="back-btn" data-back="home" aria-label="Ana Ekran"><span class="chev"></span></button>
+          <h1>Notlar</h1>
+          <button class="header-action" id="btn-new-note" aria-label="Yeni not"><span class="icon icon-plus"></span></button>
+        </header>
+        <ul class="list" id="notes-list"></ul>
+        <p class="empty-hint" id="notes-empty" hidden>Henüz not yok.</p>
+      </section>
+
+      <!-- ============ NOT DÜZENLE ============ -->
+      <section class="screen-view app-view" data-view="note-edit" id="view-note-edit">
+        <header class="app-header">
+          <button class="back-btn" id="note-back" aria-label="Notlar"><span class="chev"></span></button>
+          <h1>Not</h1>
+          <button class="header-icon-btn" id="note-delete" title="Sil"><span class="icon icon-trash"></span></button>
+        </header>
+        <textarea id="note-text-input" class="note-textarea" placeholder="Not yaz…" maxlength="2000"></textarea>
+      </section>
+
+      <!-- ============ BANKA — ANA SAYFA (App Store'dan indirilir) ============ -->
+      <section class="screen-view app-view bank-app" data-view="banka" id="view-banka">
+        <header class="app-header">
+          <button class="back-btn" data-back="home" aria-label="Ana Ekran"><span class="chev"></span></button>
+          <div class="bank-header-brand">
+            <span class="bank-header-diamond"></span>
+            <h1>LOS SANTOS <span>BANK</span></h1>
+          </div>
+          <button class="header-icon-btn" id="bank-refresh" title="Yenile"><span class="icon icon-bank-refresh"></span></button>
+        </header>
+        <div class="bank-scroll">
+          <section class="bank-card" id="bank-card">
+            <div class="bank-card-top">
+              <span class="bank-card-label"><span class="bank-dot"></span>Ana Hesap</span>
+              <button class="bank-code-pill" id="bank-copy-account" type="button">
+                <span id="bank-account-code">—</span>
+                <span class="icon icon-bank-copy"></span>
+              </button>
+            </div>
+            <div class="bank-balance-label">Kullanılabilir Bakiye</div>
+            <div class="bank-balance" id="bank-balance">$0</div>
+            <div class="bank-card-bottom">
+              <span class="bank-name" id="bank-customer-name">Müşteri</span>
+              <button class="bank-eye-btn" id="bank-eye-toggle" type="button">
+                <span class="icon icon-bank-eye" id="bank-eye-icon"></span>
+                <span id="bank-eye-label">Bakiyeyi gizle</span>
+              </button>
+            </div>
+          </section>
+
+          <section>
+            <div class="bank-section-title">Hızlı İşlemler</div>
+            <div class="bank-quick-grid">
+              <button class="bank-quick-tile" data-bank-go="deposit" style="--qc:var(--bank-gain);--qc-bg:rgba(52,224,127,0.16);--qc-line:rgba(52,224,127,0.3)">
+                <span class="bank-quick-icon"><span class="icon icon-bank-deposit"></span></span>
+                <span class="bank-quick-label">Para Yatır</span>
+              </button>
+              <button class="bank-quick-tile" data-bank-go="withdraw" style="--qc:var(--bank-warning);--qc-bg:rgba(255,182,72,0.16);--qc-line:rgba(255,182,72,0.3)">
+                <span class="bank-quick-icon"><span class="icon icon-bank-withdraw"></span></span>
+                <span class="bank-quick-label">Para Çek</span>
+              </button>
+              <button class="bank-quick-tile" data-bank-go="transfer" style="--qc:var(--bank-primary);--qc-bg:rgba(255,46,151,0.16);--qc-line:rgba(255,46,151,0.3)">
+                <span class="bank-quick-icon"><span class="icon icon-send"></span></span>
+                <span class="bank-quick-label">Havale / EFT</span>
+              </button>
+              <button class="bank-quick-tile" data-bank-go="history" style="--qc:var(--bank-secondary);--qc-bg:rgba(180,107,255,0.16);--qc-line:rgba(180,107,255,0.3)">
+                <span class="bank-quick-icon"><span class="icon icon-bank-history"></span></span>
+                <span class="bank-quick-label">Son İşlemler</span>
+              </button>
+            </div>
+          </section>
+
+          <div class="bank-stats" id="bank-stats"></div>
+
+          <button class="bank-donate-banner" id="bank-open-donate" type="button">
+            <span class="bank-donate-icon"><span class="icon icon-bank-heart"></span></span>
+            <span class="bank-donate-text">
+              <b>DAHA GÜÇLÜ BİR LOS SANTOS İÇİN</b>
+              <span class="bank-donate-cta">BAĞIŞ YAP<span class="icon icon-bank-arrow"></span></span>
+            </span>
+          </button>
+        </div>
+      </section>
+
+      <!-- ============ BANKA — PARA YATIR ============ -->
+      <section class="screen-view app-view bank-app" data-view="banka-deposit" id="view-banka-deposit">
+        <header class="app-header">
+          <button class="back-btn" data-back="banka"><span class="chev"></span>Banka</button>
+          <h1>Para Yatır</h1>
+        </header>
+        <div class="bank-scroll">
+          <div class="bank-op">
+            <p class="bank-op-desc">Üzerindeki nakiti banka hesabına aktar.</p>
+            <div class="bank-flow">
+              <div class="bank-flow-leg"><small>Nakit</small><b id="bank-dep-from">$0</b></div>
+              <span class="bank-flow-arrow"><span class="icon icon-bank-arrow"></span></span>
+              <div class="bank-flow-leg"><small>Banka</small><b id="bank-dep-to">$0</b></div>
+            </div>
+            <label class="bank-field-label" for="bank-dep-amount">Tutar</label>
+            <div class="bank-amount-wrap">
+              <span class="bank-cur">$</span>
+              <input class="bank-amount-input" id="bank-dep-amount" type="text" inputmode="numeric" placeholder="0" autocomplete="off" />
+            </div>
+            <div class="bank-chip-row" data-bank-chips="dep"></div>
+            <button class="bank-submit-btn" id="bank-dep-submit" type="button">Yatır</button>
+            <p class="bank-op-hint" id="bank-dep-hint"></p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ BANKA — PARA ÇEK ============ -->
+      <section class="screen-view app-view bank-app" data-view="banka-withdraw" id="view-banka-withdraw">
+        <header class="app-header">
+          <button class="back-btn" data-back="banka"><span class="chev"></span>Banka</button>
+          <h1>Para Çek</h1>
+        </header>
+        <div class="bank-scroll">
+          <div class="bank-op">
+            <p class="bank-op-desc">Banka hesabından nakit çek.</p>
+            <div class="bank-flow">
+              <div class="bank-flow-leg"><small>Banka</small><b id="bank-wd-from">$0</b></div>
+              <span class="bank-flow-arrow"><span class="icon icon-bank-arrow"></span></span>
+              <div class="bank-flow-leg"><small>Nakit</small><b id="bank-wd-to">$0</b></div>
+            </div>
+            <label class="bank-field-label" for="bank-wd-amount">Tutar</label>
+            <div class="bank-amount-wrap">
+              <span class="bank-cur">$</span>
+              <input class="bank-amount-input" id="bank-wd-amount" type="text" inputmode="numeric" placeholder="0" autocomplete="off" />
+            </div>
+            <div class="bank-chip-row" data-bank-chips="wd"></div>
+            <button class="bank-submit-btn" id="bank-wd-submit" type="button">Çek</button>
+            <p class="bank-op-hint" id="bank-wd-hint"></p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ BANKA — HAVALE / EFT ============ -->
+      <section class="screen-view app-view bank-app" data-view="banka-transfer" id="view-banka-transfer">
+        <header class="app-header">
+          <button class="back-btn" data-back="banka"><span class="chev"></span>Banka</button>
+          <h1>Havale / EFT</h1>
+        </header>
+        <div class="bank-scroll">
+          <div class="bank-op">
+            <p class="bank-op-desc">Banka hesap numarası ile başka bir hesaba para gönder.</p>
+            <div class="bank-flow">
+              <div class="bank-flow-leg"><small>Banka Bakiyen</small><b id="bank-tr-from">$0</b></div>
+              <span class="bank-flow-arrow"><span class="icon icon-bank-arrow"></span></span>
+              <div class="bank-flow-leg"><small>Alıcı Hesap</small><b id="bank-tr-to">—</b></div>
+            </div>
+            <label class="bank-field-label" for="bank-tr-account">Alıcı hesap no <span class="bank-field-hint">(4 hane)</span></label>
+            <input class="bank-code-input" id="bank-tr-account" type="text" maxlength="4" placeholder="K7P2" autocomplete="off" spellcheck="false" />
+            <label class="bank-field-label" for="bank-tr-amount">Tutar</label>
+            <div class="bank-amount-wrap">
+              <span class="bank-cur">$</span>
+              <input class="bank-amount-input" id="bank-tr-amount" type="text" inputmode="numeric" placeholder="0" autocomplete="off" />
+            </div>
+            <div class="bank-chip-row" data-bank-chips="tr"></div>
+            <label class="bank-field-label" for="bank-tr-note">Açıklama <span class="bank-field-hint">(opsiyonel)</span></label>
+            <input class="bank-text-input" id="bank-tr-note" type="text" maxlength="80" placeholder="Kira, borç…" autocomplete="off" />
+            <div class="bank-fee-row">Havale ücreti <b id="bank-tr-fee">$0</b></div>
+            <button class="bank-submit-btn" id="bank-tr-submit" type="button">Gönder</button>
+            <p class="bank-op-hint" id="bank-tr-hint"></p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ BANKA — BAĞIŞ ============ -->
+      <section class="screen-view app-view bank-app" data-view="banka-donate" id="view-banka-donate">
+        <header class="app-header">
+          <button class="back-btn" data-back="banka"><span class="chev"></span>Banka</button>
+          <h1>Bağış</h1>
+        </header>
+        <div class="bank-scroll">
+          <div class="bank-op">
+            <p class="bank-op-desc">Los Santos hazinesine bağış yap — daha güçlü bir şehir için.</p>
+            <div class="bank-flow">
+              <div class="bank-flow-leg"><small>Banka Bakiyen</small><b id="bank-don-from">$0</b></div>
+              <span class="bank-flow-arrow"><span class="icon icon-bank-arrow"></span></span>
+              <div class="bank-flow-leg"><small>Alıcı</small><b>Los Santos Hazinesi</b></div>
+            </div>
+            <div class="bank-fee-row">Şimdiye kadar toplanan <b id="bank-don-total">$0</b></div>
+            <label class="bank-field-label" for="bank-don-amount">Bağış tutarı</label>
+            <div class="bank-amount-wrap">
+              <span class="bank-cur">$</span>
+              <input class="bank-amount-input" id="bank-don-amount" type="text" inputmode="numeric" placeholder="0" autocomplete="off" />
+            </div>
+            <div class="bank-chip-row" data-bank-chips="don"></div>
+            <button class="bank-submit-btn" id="bank-don-submit" type="button">Bağış Yap</button>
+            <p class="bank-op-hint" id="bank-don-hint"></p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ BANKA — SON İŞLEMLER ============ -->
+      <section class="screen-view app-view bank-app" data-view="banka-history" id="view-banka-history">
+        <header class="app-header">
+          <button class="back-btn" data-back="banka"><span class="chev"></span>Banka</button>
+          <h1>Son İşlemler</h1>
+        </header>
+        <ul class="bank-tx-list" id="bank-tx-list"></ul>
+        <p class="empty-hint" id="bank-tx-empty" hidden>Henüz işlem yok.</p>
+      </section>
+
+      <!-- ============ TELEGRAM — SOHBET LİSTESİ (App Store'dan indirilir) ============ -->
+      <section class="screen-view app-view" data-view="telegram" id="view-telegram">
+        <header class="app-header">
+          <button class="back-btn" data-back="home" aria-label="Ana Ekran"><span class="chev"></span></button>
+          <h1>Telegram</h1>
+          <div class="header-actions">
+            <button class="header-icon-btn" id="btn-telegram-search" title="Ara"><span class="icon icon-search"></span></button>
+            <button class="header-icon-btn" id="btn-telegram-new" title="Yeni Sohbet"><span class="icon icon-plus"></span></button>
+          </div>
+        </header>
+        <ul class="list" id="telegram-groups-list"></ul>
+        <p class="empty-hint" id="telegram-groups-empty" hidden>Henüz bir gruba katılmadın. + ile grup kur ya da 🔍 ile ara.</p>
+      </section>
+
+      <!-- ============ TELEGRAM — YENİ SOHBET (Public/Private grup kur) ============ -->
+      <section class="screen-view app-view" data-view="telegram-new" id="view-telegram-new">
+        <header class="app-header">
+          <button class="back-btn" data-back="telegram" aria-label="Telegram"><span class="chev"></span></button>
+          <h1>Yeni Sohbet</h1>
+        </header>
+        <div class="form">
+          <label>Grup Adı</label>
+          <input type="text" id="telegram-new-name" maxlength="32" placeholder="Grup adı gir" />
+          <label>Tür</label>
+          <div class="segmented" id="telegram-new-type">
+            <button class="seg-btn active" data-group-type="public" type="button">Genel (Public)</button>
+            <button class="seg-btn" data-group-type="private" type="button">Özel (Private)</button>
+          </div>
+          <button class="primary-btn" id="telegram-new-create">Grubu Oluştur</button>
+        </div>
+      </section>
+
+      <!-- ============ TELEGRAM — GRUP ARA / KOD İLE KATIL ============ -->
+      <section class="screen-view app-view" data-view="telegram-search" id="view-telegram-search">
+        <header class="app-header">
+          <button class="back-btn" data-back="telegram" aria-label="Telegram"><span class="chev"></span></button>
+          <h1>Grup Ara</h1>
+        </header>
+        <div class="search-bar">
+          <span class="icon icon-search"></span>
+          <input type="text" id="telegram-search-input" placeholder="Genel grup ara…" />
+        </div>
+        <ul class="list" id="telegram-search-list"></ul>
+        <p class="empty-hint" id="telegram-search-empty" hidden>Sonuç bulunamadı.</p>
+        <div class="invite-join-row">
+          <input type="text" id="telegram-invite-input" maxlength="8" placeholder="Davet kodu gir" />
+          <button class="primary-btn small" id="telegram-invite-join" type="button">Katıl</button>
+        </div>
+      </section>
+
+      <!-- ============ TELEGRAM — GRUP SOHBETİ ============ -->
+      <section class="screen-view app-view" data-view="telegram-group" id="view-telegram-group">
+        <header class="app-header">
+          <button class="back-btn" data-back="telegram" aria-label="Telegram"><span class="chev"></span></button>
+          <h1 id="telegram-group-title">—</h1>
+        </header>
+        <div class="invite-strip">
+          <span class="invite-strip-label">Davet Kodu:</span>
+          <span class="invite-strip-code" id="telegram-group-invite-code">—</span>
+          <button class="invite-copy-btn" id="telegram-group-invite-copy" type="button">Kopyala</button>
+        </div>
+        <div class="thread-messages" id="telegram-group-messages"></div>
+        <div class="thread-compose">
+          <input type="text" id="telegram-group-input" maxlength="400" placeholder="Mesaj yaz…" />
+          <button id="telegram-group-send" class="send-btn" type="button" aria-label="Gönder"><span class="icon icon-send"></span></button>
+        </div>
+      </section>
+
+      <!-- ============ KONTROL MERKEZİ (durum çubuğu simgelerinden açılır) ============ -->
+      <div class="control-center" id="control-center">
+        <div class="cc-backdrop" id="cc-backdrop"></div>
+        <div class="cc-panel">
+          <div class="cc-toggles">
+            <button class="cc-toggle-btn" id="cc-silent" type="button">
+              <span class="icon icon-cc-silent"></span>
+              <label>Sessiz</label>
+            </button>
+            <button class="cc-toggle-btn" id="cc-flash" type="button">
+              <span class="icon icon-cc-flash"></span>
+              <label>Flaş</label>
+            </button>
+            <button class="cc-toggle-btn" id="cc-airshare" type="button">
+              <span class="icon icon-cc-airshare"></span>
+              <label>AirShare</label>
+            </button>
+            <div class="cc-toggle-empty"></div>
+            <div class="cc-toggle-empty"></div>
+            <div class="cc-toggle-empty"></div>
+          </div>
+          <div class="cc-sliders">
+            <div class="cc-slider-col">
+              <div class="cc-vslider" id="cc-brightness-slider">
+                <div class="cc-vslider-fill" id="cc-brightness-fill"></div>
+                <span class="cc-vslider-icon icon icon-cc-brightness"></span>
+              </div>
+              <label>Parlaklık</label>
+            </div>
+            <div class="cc-slider-col">
+              <div class="cc-vslider" id="cc-volume-slider">
+                <div class="cc-vslider-fill" id="cc-volume-fill"></div>
+                <span class="cc-vslider-icon icon icon-cc-volume"></span>
+              </div>
+              <label>Zil Sesi</label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============ AIRSHARE — PAYLAŞIM SEÇİMİ ============ -->
+      <div class="sheet" id="airshare-sheet">
+        <div class="sheet-backdrop" id="airshare-backdrop"></div>
+        <div class="sheet-panel">
+          <div class="sheet-handle"></div>
+          <h2 class="sheet-title">AirShare</h2>
+          <button class="sheet-option" id="airshare-share-number" type="button">
+            <span class="icon icon-contacts"></span>
+            <span>Numara Paylaş</span>
+          </button>
+          <button class="sheet-option" id="airshare-share-photo" type="button">
+            <span class="icon icon-gallery"></span>
+            <span>Fotoğraf Paylaş</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- ============ AIRSHARE — FOTOĞRAF SEÇ (yalnızca Fotoğraf Paylaş) ============ -->
+      <div class="sheet" id="airshare-photo-sheet">
+        <div class="sheet-backdrop" id="airshare-photo-backdrop"></div>
+        <div class="sheet-panel tall">
+          <div class="sheet-handle"></div>
+          <h2 class="sheet-title">Fotoğraf Seç</h2>
+          <div class="gallery-grid" id="airshare-photo-grid"></div>
+          <p class="empty-hint" id="airshare-photo-empty" hidden>Galeri boş.</p>
+        </div>
+      </div>
+
+      <!-- ============ AIRSHARE — YAKINDAKİ OYUNCULAR ============ -->
+      <div class="sheet" id="airshare-nearby-sheet">
+        <div class="sheet-backdrop" id="airshare-nearby-backdrop"></div>
+        <div class="sheet-panel tall">
+          <div class="sheet-handle"></div>
+          <h2 class="sheet-title">Yakındaki Oyuncular</h2>
+          <ul class="list" id="airshare-nearby-list"></ul>
+          <p class="empty-hint" id="airshare-nearby-empty" hidden>Yakında oyuncu yok.</p>
+        </div>
+      </div>
+
+      <!-- ============ AIRSHARE — GELEN İSTEK (TAM EKRAN) ============ -->
+      <div class="call-overlay" id="airshare-incoming" hidden>
+        <div class="call-avatar"></div>
+        <p class="call-label" id="airshare-incoming-label">AirShare İsteği</p>
+        <h2 class="call-number" id="airshare-incoming-from">—</h2>
+        <div class="call-actions">
+          <button class="call-btn decline" id="airshare-decline"><span class="icon icon-call-end"></span></button>
+          <button class="call-btn accept" id="airshare-accept"><span class="icon icon-call"></span></button>
+        </div>
+      </div>
+
+      <!-- ============ GELEN ARAMA (TAM EKRAN) ============ -->
+      <div class="call-overlay" id="call-incoming" hidden>
+        <div class="call-avatar"></div>
+        <p class="call-label">Gelen Arama</p>
+        <h2 class="call-number" id="incoming-number">—</h2>
+        <div class="call-actions">
+          <button class="call-btn decline" id="btn-decline"><span class="icon icon-call-end"></span></button>
+          <button class="call-btn accept" id="btn-accept"><span class="icon icon-call"></span></button>
+        </div>
+      </div>
+
+      <!-- ============ AKTİF ARAMA (TAM EKRAN) ============ -->
+      <div class="call-overlay" id="call-active" hidden>
+        <div class="call-avatar pulsing"></div>
+        <p class="call-label" id="active-call-status">Çalıyor…</p>
+        <h2 class="call-number" id="active-call-number">—</h2>
+        <div class="call-timer" id="call-timer">00:00</div>
+        <div class="call-actions single">
+          <button class="call-btn decline" id="btn-hangup"><span class="icon icon-call-end"></span></button>
+        </div>
+      </div>
+
+      <!-- ============ LIFEGRAM — İLK AÇILIŞ: KULLANICI ADI SEÇ ============ -->
+      <section class="screen-view app-view social-app" data-view="social-onboarding" id="view-social-onboarding">
+        <div class="social-onboard">
+          <div class="social-onboard-glyph"></div>
+          <h1 class="social-onboard-title">Lifegram'a Hoş Geldin</h1>
+          <p class="social-onboard-sub">Devam etmek için bir kullanıcı adı seç. Sonradan değiştirebilirsin.</p>
+          <div class="social-field">
+            <span class="social-field-prefix">@</span>
+            <input type="text" id="social-onboard-username" maxlength="20" placeholder="kullaniciadi" autocomplete="off" />
+          </div>
+          <textarea id="social-onboard-bio" class="social-bio-input" maxlength="150" placeholder="Biyografi (opsiyonel)"></textarea>
+          <button class="social-primary-btn" id="social-onboard-submit" type="button">Başla</button>
+          <p class="social-onboard-hint" id="social-onboard-hint"></p>
+        </div>
+      </section>
+
+      <!-- ============ LIFEGRAM — ANA KABUK (4 sekme: Ana Sayfa/Keşfet/Mesajlar/Profil) ============ -->
+      <section class="screen-view app-view social-app" data-view="social" id="view-social">
+        <div class="social-tabs-content">
+
+          <!-- ---- ANA SAYFA ---- -->
+          <div class="social-tab-panel active" data-social-tab="feed" id="social-tab-feed">
+            <div class="social-topbar">
+              <button class="back-btn" data-back="home" aria-label="Ana Ekran"><span class="chev"></span></button>
+              <h1 class="social-wordmark">Lifegram</h1>
+              <button class="social-icon-btn" id="social-new-post-btn" aria-label="Yeni gönderi" type="button"><span class="icon icon-plus"></span></button>
+            </div>
+            <div class="social-scroll">
+              <div class="social-stories" id="social-stories"></div>
+              <div class="social-feed" id="social-feed"></div>
+              <p class="empty-hint" id="social-feed-empty" hidden>Takip ettiğin kimse yok. Keşfet'ten insanları bul!</p>
+              <button class="social-load-more" id="social-feed-more" type="button" hidden>Daha fazla göster</button>
+            </div>
+          </div>
+
+          <!-- ---- KEŞFET ---- -->
+          <div class="social-tab-panel" data-social-tab="explore" id="social-tab-explore">
+            <div class="social-topbar social-topbar-search">
+              <button class="back-btn" data-back="home" aria-label="Ana Ekran"><span class="chev"></span></button>
+              <div class="search-bar social-search-bar">
+                <span class="icon icon-search"></span>
+                <input type="text" id="social-search-input" placeholder="Ara" autocomplete="off" />
+              </div>
+            </div>
+            <div class="social-scroll">
+              <div class="social-explore-grid" id="social-explore-grid"></div>
+              <p class="empty-hint" id="social-explore-empty" hidden>Henüz keşfedilecek gönderi yok.</p>
+              <ul class="list" id="social-search-results" hidden></ul>
+              <p class="empty-hint" id="social-search-empty" hidden>Kimse bulunamadı.</p>
+            </div>
+          </div>
+
+          <!-- ---- MESAJLAR ---- -->
+          <div class="social-tab-panel" data-social-tab="messages" id="social-tab-messages">
+            <div class="social-topbar">
+              <button class="back-btn" data-back="home" aria-label="Ana Ekran"><span class="chev"></span></button>
+              <h1>Mesajlar</h1>
+            </div>
+            <div class="social-scroll">
+              <ul class="list" id="social-threads-list"></ul>
+              <p class="empty-hint" id="social-threads-empty" hidden>Henüz mesajın yok.</p>
+            </div>
+          </div>
+
+          <!-- ---- PROFİL (kendi) ---- -->
+          <div class="social-tab-panel" data-social-tab="profile" id="social-tab-profile">
+            <div class="social-topbar">
+              <button class="back-btn" data-back="home" aria-label="Ana Ekran"><span class="chev"></span></button>
+              <h1 id="social-own-username-header">@kullanici</h1>
+              <button class="social-icon-btn" id="social-own-menu-btn" aria-label="Profili Düzenle" type="button"><span class="icon icon-social-settings"></span></button>
+            </div>
+            <div class="social-scroll">
+              <div class="social-profile" id="social-own-profile"></div>
+            </div>
+          </div>
+
+        </div>
+
+        <nav class="social-bottom-nav" id="social-bottom-nav">
+          <button class="social-nav-btn active" data-social-tab="feed" type="button"><span class="icon icon-social-home"></span></button>
+          <button class="social-nav-btn" data-social-tab="explore" type="button"><span class="icon icon-search"></span></button>
+          <button class="social-nav-btn" data-social-tab="messages" type="button">
+            <span class="icon icon-message"></span>
+            <span class="badge" id="social-badge-messages" hidden></span>
+          </button>
+          <button class="social-nav-btn" data-social-tab="profile" type="button"><img class="social-nav-avatar" id="social-nav-avatar" alt="" /></button>
+        </nav>
+      </section>
+
+      <!-- ============ LIFEGRAM — BAŞKASININ PROFİLİ ============ -->
+      <section class="screen-view app-view social-app" data-view="social-user-profile" id="view-social-user-profile">
+        <div class="social-topbar">
+          <button class="back-btn" data-back="social" aria-label="Geri"><span class="chev"></span></button>
+          <h1 id="social-other-username-header">@kullanici</h1>
+        </div>
+        <div class="social-scroll">
+          <div class="social-profile" id="social-other-profile"></div>
+        </div>
+      </section>
+
+      <!-- ============ LIFEGRAM — PROFİLİ DÜZENLE ============ -->
+      <section class="screen-view app-view social-app" data-view="social-edit-profile" id="view-social-edit-profile">
+        <div class="social-topbar">
+          <button class="back-btn" data-back="social" aria-label="Geri"><span class="chev"></span></button>
+          <h1>Profili Düzenle</h1>
+          <button class="header-action" id="social-edit-save" type="button">Kaydet</button>
+        </div>
+        <div class="social-scroll">
+          <div class="social-edit-form">
+            <button class="social-edit-avatar-btn" id="social-edit-avatar-btn" type="button">
+              <img id="social-edit-avatar-preview" alt="" hidden />
+              <span class="social-edit-avatar-label" id="social-edit-avatar-label">Fotoğrafı Değiştir</span>
+            </button>
+            <label class="social-field-label">Kullanıcı Adı</label>
+            <div class="social-field"><span class="social-field-prefix">@</span><input type="text" id="social-edit-username" maxlength="20" autocomplete="off" /></div>
+            <label class="social-field-label">Biyografi</label>
+            <textarea id="social-edit-bio" class="social-bio-input" maxlength="150"></textarea>
+            <p class="social-onboard-hint" id="social-edit-hint"></p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ LIFEGRAM — SOHBET DETAYI (uygulama içi DM) ============ -->
+      <section class="screen-view app-view social-app" data-view="social-chat" id="view-social-chat">
+        <div class="social-topbar">
+          <button class="back-btn" id="social-chat-back" aria-label="Geri" type="button"><span class="chev"></span></button>
+          <img class="social-chat-avatar" id="social-chat-avatar" alt="" />
+          <h1 id="social-chat-username">@kullanici</h1>
+        </div>
+        <div class="social-chat-messages" id="social-chat-messages"></div>
+        <div class="social-chat-input-row">
+          <input type="text" id="social-chat-input" placeholder="Mesaj yaz…" maxlength="400" autocomplete="off" />
+          <button class="send-btn" id="social-chat-send" aria-label="Gönder" type="button"><span class="icon icon-send"></span></button>
+        </div>
+      </section>
+
+      <!-- ============ LIFEGRAM — YENİ PAYLAŞIM (Gönderi/Hikaye) ============ -->
+      <section class="screen-view app-view social-app" data-view="social-new-post" id="view-social-new-post">
+        <div class="social-topbar">
+          <button class="back-btn" data-back="social" aria-label="Geri"><span class="chev"></span></button>
+          <h1>Yeni Paylaşım</h1>
+          <button class="header-action" id="social-post-submit" type="button">Paylaş</button>
+        </div>
+        <div class="social-scroll">
+          <div class="segmented social-post-type" id="social-post-type">
+            <button class="seg-btn active" data-post-type="post" type="button">Gönderi</button>
+            <button class="seg-btn" data-post-type="story" type="button">Hikaye</button>
+          </div>
+          <button class="social-pick-photo-btn" id="social-pick-photo-btn" type="button">
+            <img id="social-new-post-preview" alt="" hidden />
+            <span class="social-pick-photo-label" id="social-pick-photo-label">Galeriden Fotoğraf Seç</span>
+          </button>
+          <div class="social-post-fields" id="social-post-fields">
+            <textarea id="social-post-caption" class="social-caption-input" maxlength="300" placeholder="Açıklama ekle…"></textarea>
+            <div class="social-field"><span class="icon icon-location"></span><input type="text" id="social-post-location" maxlength="64" placeholder="Konum ekle (opsiyonel)" autocomplete="off" /></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ LIFEGRAM — YENİ PAYLAŞIM İÇİN GALERİDEN SEÇ ============ -->
+      <div class="sheet" id="social-post-photo-sheet">
+        <div class="sheet-backdrop" id="social-post-photo-backdrop"></div>
+        <div class="sheet-panel tall">
+          <div class="sheet-handle"></div>
+          <h2 class="sheet-title">Fotoğraf Seç</h2>
+          <div class="gallery-grid" id="social-post-photo-grid"></div>
+          <p class="empty-hint" id="social-post-photo-empty" hidden>Galeri boş.</p>
+        </div>
+      </div>
+
+      <!-- ============ LIFEGRAM — PROFİL FOTOĞRAFI İÇİN GALERİDEN SEÇ ============ -->
+      <div class="sheet" id="social-avatar-photo-sheet">
+        <div class="sheet-backdrop" id="social-avatar-photo-backdrop"></div>
+        <div class="sheet-panel tall">
+          <div class="sheet-handle"></div>
+          <h2 class="sheet-title">Profil Fotoğrafı Seç</h2>
+          <div class="gallery-grid" id="social-avatar-photo-grid"></div>
+          <p class="empty-hint" id="social-avatar-photo-empty" hidden>Galeri boş.</p>
+        </div>
+      </div>
+
+      <!-- ============ LIFEGRAM — TEK GÖNDERİ (Keşfet/Profil ızgarasından açılır) ============ -->
+      <div class="sheet" id="social-post-detail-sheet">
+        <div class="sheet-backdrop" id="social-post-detail-backdrop"></div>
+        <div class="sheet-panel tall">
+          <div class="sheet-handle"></div>
+          <div class="social-scroll" id="social-post-detail-content"></div>
+        </div>
+      </div>
+
+      <!-- ============ LIFEGRAM — YORUMLAR ============ -->
+      <div class="sheet" id="social-comments-sheet">
+        <div class="sheet-backdrop" id="social-comments-backdrop"></div>
+        <div class="sheet-panel tall social-comments-panel">
+          <div class="sheet-handle"></div>
+          <h2 class="sheet-title">Yorumlar</h2>
+          <div class="social-comments-list" id="social-comments-list"></div>
+          <p class="empty-hint" id="social-comments-empty" hidden>Henüz yorum yok.</p>
+          <div class="social-comment-input-row">
+            <input type="text" id="social-comment-input" placeholder="Yorum ekle…" maxlength="300" autocomplete="off" />
+            <button class="social-comment-send" id="social-comment-send" type="button">Paylaş</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============ LIFEGRAM — GÖNDERİYİ BİRİNE GÖNDER ============ -->
+      <div class="sheet" id="social-share-sheet">
+        <div class="sheet-backdrop" id="social-share-backdrop"></div>
+        <div class="sheet-panel tall">
+          <div class="sheet-handle"></div>
+          <h2 class="sheet-title">Gönder</h2>
+          <div class="search-bar">
+            <span class="icon icon-search"></span>
+            <input type="text" id="social-share-search" placeholder="Kişi ara…" autocomplete="off" />
+          </div>
+          <ul class="list" id="social-share-list"></ul>
+        </div>
+      </div>
+
+      <!-- ============ LIFEGRAM — HİKAYE GÖRÜNTÜLEYİCİ (TAM EKRAN) ============ -->
+      <div class="social-story-viewer" id="social-story-viewer" hidden>
+        <div class="social-story-segments" id="social-story-segments"></div>
+        <div class="social-story-header">
+          <img class="social-story-avatar" id="social-story-avatar" alt="" />
+          <span class="social-story-username" id="social-story-username"></span>
+          <span class="social-story-time" id="social-story-time"></span>
+          <button class="social-story-close" id="social-story-close" type="button"><span class="icon icon-social-close"></span></button>
+        </div>
+        <img class="social-story-photo" id="social-story-photo" alt="" />
+        <div class="social-story-tapzone left" id="social-story-prev"></div>
+        <div class="social-story-tapzone right" id="social-story-next"></div>
+        <div class="social-story-footer">
+          <input type="text" class="social-story-reply-input" id="social-story-reply-input" placeholder="Mesaj gönder…" autocomplete="off" />
+          <button class="social-story-reply-send" id="social-story-reply-send" type="button"><span class="icon icon-send"></span></button>
+        </div>
+      </div>
+
+      <!-- alt gösterge çubuğu -->
+      <div class="home-indicator" id="home-indicator"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ TAM EKRAN KAMERA (GTA Online tarzı) ============
+     Tamamen şeffaf: arkada script kamera tam ekran görünür, burada yalnızca
+     kadraj maskesi ve bilgi çizilir. NUI odağı kapalıdır; kontroller oyun
+     tuşlarından okunur (client/main.lua cameraTick). Çekim game-view
+     dokusundan alındığı için bu katman fotoğrafa GİRMEZ (app.js GameView). -->
+<div id="camera-overlay" hidden>
+  <div class="cam-window" id="camera-window">
+    <span class="cam-corner tl"></span>
+    <span class="cam-corner tr"></span>
+    <span class="cam-corner bl"></span>
+    <span class="cam-corner br"></span>
+    <span class="cam-focus"></span>
+  </div>
+
+  <div class="cam-saved" id="camera-saved" hidden>
+    <img id="camera-saved-thumb" alt="" />
+    <span id="camera-saved-text">Galeriye kaydedildi</span>
+  </div>
+
+  <div class="cam-top">
+    <span class="cam-pill cam-rec" id="camera-rec" hidden>● 00:00 / 00:20</span>
+    <span class="cam-pill" id="camera-ratio-label">TAM EKRAN</span>
+    <span class="cam-pill" id="camera-selfie" hidden>SELFIE</span>
+    <span class="cam-pill cam-flash-ind" id="camera-flash">⚡ FLAŞ</span>
+  </div>
+
+  <div class="cam-bottom">
+    <div class="cam-modes" id="camera-media">
+      <span class="cam-mode" data-media="photo">FOTOĞRAF</span>
+      <span class="cam-mode" data-media="video">VİDEO</span>
+    </div>
+    <div class="cam-modes" id="camera-modes">
+      <span class="cam-mode" data-mode="full">TAM EKRAN</span>
+      <span class="cam-mode" data-mode="story">HİKAYE</span>
+      <span class="cam-mode" data-mode="post">GÖNDERİ</span>
+    </div>
+    <div class="cam-ratios" id="camera-ratios" hidden>
+      <span class="cam-ratio" data-ratio="1:1">1:1</span>
+      <span class="cam-ratio" data-ratio="1.91:1">1.91:1</span>
+    </div>
+    <p class="cam-dest" id="camera-dest"></p>
+    <div class="cam-keys">
+      <span><kbd>Sol Tık</kbd><span id="camera-key-shoot">Çek</span></span>
+      <span><kbd>Sağ Tık</kbd>Çık</span>
+      <span><kbd>WASD</kbd>Yürü</span>
+      <span><kbd>Q</kbd>Fotoğraf/Video</span>
+      <span><kbd>←</kbd><kbd>→</kbd>Ölçek</span>
+      <span id="camera-key-ratio" hidden><kbd>R</kbd>Oran</span>
+      <span><kbd>Tekerlek</kbd>Yakınlaştır</span>
+      <span><kbd>E</kbd>Selfie</span>
+    </div>
+  </div>
+
+  <div class="flash-pulse" id="flash-pulse"></div>
+</div>
+
+<div id="toast-stack"></div>
+
+<script src="js/app.js"></script>
+</body>
+</html>
