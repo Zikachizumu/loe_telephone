@@ -1041,6 +1041,38 @@ lib.callback.register('loe_telephone:shareRespond', function(source, data)
 end)
 
 --- Oyuncu ayrılırsa üstündeki tüm aramaları temizle, karşı tarafı bilgilendir.
+---------------------------------------------------------------------------
+-- DEVLETİN MESAJI — başka resource'lar (loe_jobcreator: polis cezası) bir
+-- karaktere devletin numarasından (Config.messages.stateNumber) SMS atar.
+-- Karakterin aktif hattı yoksa mesaj gitmez (false döner).
+--   exports.loe_telephone:SendStateMessage(citizenid, body) -> boolean
+---------------------------------------------------------------------------
+exports('SendStateMessage', function(citizenid, body)
+    if type(citizenid) ~= 'string' or citizenid == '' then return false end
+
+    body = Utils.validMessageBody(body)
+    if not body then return false end
+
+    local to = activeNumberOf(citizenid)
+    if not to then return false end
+
+    local from = Config.messages.stateNumber or '00000911'
+    local id = MySQL.insert.await(
+        ('INSERT INTO `%s` (`from_number`, `to_number`, `body`, `photo_data`, `location`) VALUES (?, ?, ?, NULL, NULL)'):format(MSGTBL),
+        { from, to, body }
+    )
+    if not id then return false end
+
+    local player = exports.qbx_core:GetPlayerByCitizenId(citizenid)
+    if player then
+        TriggerClientEvent('loe_telephone:client:incomingMessage', player.PlayerData.source, {
+            id = id, from_number = from, to_number = to, body = body, ts = os.time(),
+        })
+    end
+
+    return true
+end)
+
 AddEventHandler('playerDropped', function()
     local source = source
     for callId, call in pairs(activeCalls) do

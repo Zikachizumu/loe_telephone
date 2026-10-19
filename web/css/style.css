@@ -2279,3 +2279,11 @@ body.camera-mode #phone-root { opacity: 0; pointer-events: none; }
   background: #131315;
   color-scheme: dark;
 }
+
+/* Banka — Cezalar (polis cezaları) */
+.bank-quick-wide { grid-column: 1 / -1; }
+.bank-fines-count { margin-left: 6px; padding: 1px 7px; border-radius: 999px; background: var(--bank-primary); color: #fff; font-size: 11px; }
+.bank-fine-row { align-items: flex-start; }
+.bank-fine-what, .bank-fine-note { white-space: normal; }
+.bank-fine-note { font-style: italic; }
+.bank-fine-pay { margin-top: 6px; }

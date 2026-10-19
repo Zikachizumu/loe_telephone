@@ -156,6 +156,7 @@ function switchView(name) {
   if (name === 'banka') bankOpenOverview();
   if (name === 'banka-deposit' || name === 'banka-withdraw' || name === 'banka-transfer' || name === 'banka-donate') bankRenderForms();
   if (name === 'banka-history') bankRenderHistory();
+  if (name === 'banka-fines') bankOpenFines();
   if (name === 'social') openSocialHome();
   if (name === 'lifegram') openLifegram();
 }
@@ -2423,6 +2424,7 @@ async function bankOpenOverview() {
   bankApplyResult(res);
   try { BankState.balHidden = localStorage.getItem('loe_bank_balHidden') === '1'; } catch (e) { BankState.balHidden = false; }
   bankRenderOverview();
+  bankLoadFines();
 }
 
 function bankRenderOverview() {
@@ -2695,6 +2697,86 @@ function bankRenderHistory() {
         <div class="bank-tx-when">${esc(bankFmtWhen(r.ts))}</div>
       </div>
     `;
+    list.appendChild(li);
+  });
+}
+
+/* ---- cezalar: polisin kestiği ödenmemiş cezalar (loe_jobcreator) ---- */
+
+const BankFines = { list: [] };
+
+function bankFineWhat(fine) {
+  return (fine.offences || []).map((o) => (o.code ? o.code + ' ' : '') + (o.label || '')).join(', ');
+}
+
+function bankRenderFinesCount() {
+  const el = document.getElementById('bank-fines-count');
+  if (!el) return;
+  el.hidden = BankFines.list.length === 0;
+  el.textContent = String(BankFines.list.length);
+}
+
+async function bankLoadFines() {
+  const res = await post('bankGetFines');
+  if (!res || !res.success) {
+    BankFines.list = [];
+    bankRenderFinesCount();
+    return res;
+  }
+  BankFines.list = Array.isArray(res.fines) ? res.fines : [];
+  bankRenderFinesCount();
+  return res;
+}
+
+async function bankOpenFines() {
+  const res = await bankLoadFines();
+  if (!res || !res.success) showToast('error', (res && res.reason) || 'Cezalar alınamadı.');
+  bankRenderFines();
+}
+
+function bankRenderFines() {
+  const list = document.getElementById('bank-fines-list');
+  const empty = document.getElementById('bank-fines-empty');
+  list.innerHTML = '';
+  empty.hidden = BankFines.list.length > 0;
+
+  BankFines.list.forEach((fine) => {
+    const li = document.createElement('li');
+    li.className = 'bank-tx-row bank-fine-row';
+    li.style.setProperty('--cat', '#ff2e97');
+    li.style.setProperty('--cat-bg', bankHexA('#ff2e97', 0.16));
+    li.innerHTML = `
+      <span class="bank-tx-icon"><span class="icon icon-bank-history"></span></span>
+      <div class="bank-tx-main">
+        <div class="bank-tx-title">${esc((fine.job || '').toUpperCase())} · #${esc(fine.id)}${fine.callsign ? ' · ' + esc(fine.callsign) : ''}</div>
+        <div class="bank-tx-sub bank-fine-what">${esc(bankFineWhat(fine))}</div>
+        ${fine.note ? `<div class="bank-tx-sub bank-fine-note">${esc(fine.note)}</div>` : ''}
+      </div>
+      <div class="bank-tx-right">
+        <div class="bank-tx-amt neg">${esc(bankMoney(fine.amount))}</div>
+        <div class="bank-tx-when">${esc(bankFmtWhen(fine.at))}</div>
+        <button type="button" class="bank-chip-btn bank-fine-pay">Öde</button>
+      </div>
+    `;
+    li.querySelector('.bank-fine-pay').addEventListener('click', async (event) => {
+      const btn = event.currentTarget;
+      if ((BankState.player.bank || 0) < (fine.amount || 0)) {
+        showToast('error', 'Banka bakiyen yetersiz.');
+        return;
+      }
+      btn.disabled = true;
+      const res = await post('bankPayFine', { id: fine.id });
+      if (!res || !res.success) {
+        btn.disabled = false;
+        showToast('error', (res && res.reason) || 'Ödenemedi.');
+        return;
+      }
+      showToast('success', (res && res.reason) || 'Ceza ödendi.');
+      const data = await post('bankGetData');
+      if (data && data.success) { bankApplyResult(data); bankRenderOverview(); }
+      await bankLoadFines();
+      bankRenderFines();
+    });
     list.appendChild(li);
   });
 }

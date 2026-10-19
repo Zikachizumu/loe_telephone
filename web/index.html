@@ -329,6 +329,10 @@
                 <span class="bank-quick-icon"><span class="icon icon-bank-history"></span></span>
                 <span class="bank-quick-label">Son İşlemler</span>
               </button>
+              <button class="bank-quick-tile bank-quick-wide" data-bank-go="fines" style="--qc:var(--bank-primary);--qc-bg:rgba(255,46,151,0.16);--qc-line:rgba(255,46,151,0.3)">
+                <span class="bank-quick-icon"><span class="icon icon-bank-history"></span></span>
+                <span class="bank-quick-label">Cezalar <b class="bank-fines-count" id="bank-fines-count" hidden></b></span>
+              </button>
             </div>
           </section>
 
@@ -462,6 +466,16 @@
         </header>
         <ul class="bank-tx-list" id="bank-tx-list"></ul>
         <p class="empty-hint" id="bank-tx-empty" hidden>Henüz işlem yok.</p>
+      </section>
+
+      <!-- ============ BANKA — CEZALAR (polisin kestiği, ödenmemiş cezalar: loe_jobcreator) ============ -->
+      <section class="screen-view app-view bank-app" data-view="banka-fines" id="view-banka-fines">
+        <header class="app-header">
+          <button class="back-btn" data-back="banka"><span class="chev"></span>Banka</button>
+          <h1>Cezalar</h1>
+        </header>
+        <ul class="bank-tx-list" id="bank-fines-list"></ul>
+        <p class="empty-hint" id="bank-fines-empty" hidden>Ödenmemiş cezan yok.</p>
       </section>
 
       <!-- ============ TELEGRAM — SOHBET LİSTESİ (App Store'dan indirilir) ============ -->
