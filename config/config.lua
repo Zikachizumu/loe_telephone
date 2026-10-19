@@ -54,6 +54,8 @@ LoeTelephone.Config = {
         threadLimit = 100,
         -- Mesaja eklenen fotoğrafın (data URL, base64) en fazla karakter uzunluğu.
         photoMaxLength = 1500000,
+        -- Devletin mesajları (polis cezası vb.) bu numaradan gelir: exports.loe_telephone:SendStateMessage.
+        stateNumber = '00000911',
     },
 
     ---------------------------------------------------------------------------
@@ -94,6 +96,9 @@ LoeTelephone.Config = {
         -- loe_bank kurulu/başlamış değilse Banka uygulaması nazikçe
         -- "kullanılamıyor" mesajı gösterir (GetResourceState ile kontrol edilir).
         resource = 'loe_bank',
+        -- Banka uygulamasındaki "Cezalar" sayfası polis cezalarını bu resource'tan okur ve öder
+        -- (loe_jobcreator'ın loe:fines:mine / loe:fines:pay callback'leri).
+        finesResource = 'loe_jobcreator',
     },
 
     ---------------------------------------------------------------------------

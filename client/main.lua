@@ -129,6 +129,26 @@ local function bankUnavailable(cb)
     return true
 end
 
+-- Polis cezaları (Banka uygulamasının "Cezalar" sayfası): loe_jobcreator okur ve öder.
+local function finesUnavailable(cb)
+    if GetResourceState(Config.bank.finesResource or 'loe_jobcreator') == 'started' then return false end
+    cb({ success = false, reason = 'Ceza servisi şu anda kullanılamıyor.' })
+    return true
+end
+
+RegisterNUICallback('bankGetFines', function(_, cb)
+    if finesUnavailable(cb) then return end
+    local res = lib.callback.await('loe:fines:mine', false)
+    cb(type(res) == 'table' and { success = res.ok == true, fines = res.fines or {}, reason = res.text } or { success = false, reason = 'Sunucudan yanıt yok.' })
+end)
+
+RegisterNUICallback('bankPayFine', function(data, cb)
+    if finesUnavailable(cb) then return end
+    local id = tonumber(type(data) == 'table' and data.id or nil)
+    local res = lib.callback.await('loe:fines:pay', false, id)
+    cb(type(res) == 'table' and { success = res.ok == true, reason = res.text } or { success = false, reason = 'Sunucudan yanıt yok.' })
+end)
+
 RegisterNUICallback('bankGetData', function(_, cb)
     if bankUnavailable(cb) then return end
     cb(lib.callback.await('loe_bank:getData', false) or { success = false, reason = 'Sunucudan yanıt yok.' })
