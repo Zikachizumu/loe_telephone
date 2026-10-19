@@ -2712,8 +2712,9 @@ function bankFineWhat(fine) {
 function bankRenderFinesCount() {
   const el = document.getElementById('bank-fines-count');
   if (!el) return;
-  el.hidden = BankFines.list.length === 0;
-  el.textContent = String(BankFines.list.length);
+  const unpaid = BankFines.list.filter((f) => !f.paid).length;
+  el.hidden = unpaid === 0;
+  el.textContent = String(unpaid);
 }
 
 async function bankLoadFines() {
@@ -2753,12 +2754,15 @@ function bankRenderFines() {
         ${fine.note ? `<div class="bank-tx-sub bank-fine-note">${esc(fine.note)}</div>` : ''}
       </div>
       <div class="bank-tx-right">
-        <div class="bank-tx-amt neg">${esc(bankMoney(fine.amount))}</div>
+        <div class="bank-tx-amt ${fine.paid ? 'pos' : 'neg'}">${esc(bankMoney(fine.amount))}</div>
         <div class="bank-tx-when">${esc(bankFmtWhen(fine.at))}</div>
-        <button type="button" class="bank-chip-btn bank-fine-pay">Öde</button>
+        ${fine.paid
+          ? `<div class="bank-fine-paid">Ödendi${fine.paidAt ? ' · ' + esc(bankFmtWhen(fine.paidAt)) : ''}</div>`
+          : '<button type="button" class="bank-chip-btn bank-fine-pay">Öde</button>'}
       </div>
     `;
-    li.querySelector('.bank-fine-pay').addEventListener('click', async (event) => {
+    const payBtn = li.querySelector('.bank-fine-pay');
+    if (payBtn) payBtn.addEventListener('click', async (event) => {
       const btn = event.currentTarget;
       if ((BankState.player.bank || 0) < (fine.amount || 0)) {
         showToast('error', 'Banka bakiyen yetersiz.');
