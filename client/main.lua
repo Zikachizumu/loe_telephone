@@ -308,7 +308,7 @@ local SOCIAL_ACTIONS = {
     socialGetSaved          = 'getSaved',
     socialGetNotifications  = 'getNotifications',
     socialMarkNotificationsSeen = 'markNotificationsSeen',
-    -- Parçalı medya aktarımı (her istek FiveM'in 1 MB olay sınırının altında kalır).
+    -- Parçalı medya aktarımı (parça boyutu ve hız sınırı için aşağıdaki UPLOAD_* ayarlarına bak).
     socialMediaBegin        = 'mediaBegin',
     socialMediaChunk        = 'mediaChunk',
     socialMediaCommit       = 'mediaCommit',
@@ -316,13 +316,55 @@ local SOCIAL_ACTIONS = {
     socialGetMediaChunk     = 'getMediaChunk',
 }
 
+-- Medya yükleme hız sınırı.
+-- FXServer, istemciden gelen güvenilir (reliable) ağ olaylarının toplam boyutunu bir kova (token bucket) ile
+-- sınırlar (FXServer kaynağı, ServerEventPacketHandler.cpp: "netEventSize" = 128 KiB/sn sürekli,
+-- 384 KiB patlama; ayar adları rateLimiter_netEventSize_rate / _burst). Kova taşınca oyuncu
+-- "Reliable network event size overflow" ile oyundan atılır. Lifegram hikâye yüklemesi (6,6 MB video,
+-- 200 KB'lık parçalar) 3. parçada bu sınıra çarpıp oyuncuyu atıyordu (kapak ~31 KB + 2 x 200 KB geçti).
+-- mediaBegin/mediaChunk istekleri bu yüzden burada sınırın ALTINDA (~%76) sürekli hızda tutulur;
+-- kalan pay oyunun diğer olaylarına (envanter, telefon vb.) bırakılır.
+-- Değerleri değiştirirken loe_lifegram/config/config.lua içindeki media.* boyut sınırlarıyla birlikte düşün.
+local UPLOAD_RATE  = 100000  -- bayt/sn sürekli yükleme hızı (sunucu sınırı: 131072)
+local UPLOAD_BURST = 200000  -- ilk anda beklemeden gönderilebilecek bayt (sunucu sınırı: 393216)
+local uploadTokens = UPLOAD_BURST
+local uploadStamp  = GetGameTimer()
+
+local function refillUpload()
+    local now = GetGameTimer()
+    uploadTokens = math.min(UPLOAD_BURST, uploadTokens + (now - uploadStamp) * UPLOAD_RATE / 1000)
+    uploadStamp = now
+end
+
+--- `bytes` kadar veri göndermeden önce gerekirse bekler (kova eksiye düşmüşse dolana kadar).
+local function paceUpload(bytes)
+    refillUpload()
+    if uploadTokens < 0 then
+        Wait(math.ceil(-uploadTokens * 1000 / UPLOAD_RATE))
+        refillUpload()
+    end
+    uploadTokens = uploadTokens - bytes
+end
+
+--- Bu isteğin sunucuya götüreceği medya verisi (bayt). Medya dışı istekler sayılmaz.
+local function uploadBytes(serverAction, data)
+    if type(data) ~= 'table' then return 0 end
+    if serverAction == 'mediaChunk' then
+        return type(data.data) == 'string' and #data.data or 0
+    elseif serverAction == 'mediaBegin' then
+        return type(data.thumb) == 'string' and #data.thumb or 0
+    end
+    return 0
+end
+
 for nuiAction, serverAction in pairs(SOCIAL_ACTIONS) do
     RegisterNUICallback(nuiAction, function(data, cb)
         if socialUnavailable(cb) then return end
-        -- pcall: FiveM'in ağ olayı başına ~1 MB sınırı aşılırsa (ör. çok büyük
-        -- bir fotoğraf) native hata fırlatır ve bu coroutine cb() çağırmadan
-        -- ölür — NUI tarafı sonsuza dek "gönderiliyor" durumunda kalır. Bunun
-        -- yerine temiz bir hata döndürülür.
+        local bytes = uploadBytes(serverAction, data)
+        if bytes > 0 then paceUpload(bytes) end
+        -- pcall: ağ olayı hata fırlatırsa bu coroutine cb() çağırmadan ölür —
+        -- NUI tarafı sonsuza dek "gönderiliyor" durumunda kalır. Bunun yerine
+        -- temiz bir hata döndürülür.
         local ok, res = pcall(lib.callback.await, 'loe_lifegram:' .. serverAction, false, data)
         if not ok then
             Utils.log(('social %s hata verdi: %s'):format(serverAction, tostring(res)))

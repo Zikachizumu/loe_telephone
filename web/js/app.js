@@ -1520,7 +1520,7 @@ const GameView = (() => {
 
 const VIDEO_MAX_MS = 20000;
 const VIDEO_FPS = 30;
-const VIDEO_BITRATE = 2500000;
+const VIDEO_BITRATE = 1000000;
 const VIDEO_TYPES = ['video/webm;codecs=vp8', 'video/webm;codecs=vp9', 'video/webm'];
 
 /** recording: kamera kaydediyor · busy: kaydediyor VEYA kayıt galeriye yazılıyor. */
