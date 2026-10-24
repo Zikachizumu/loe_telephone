@@ -159,6 +159,7 @@ function switchView(name) {
   if (name === 'banka-fines') bankOpenFines();
   if (name === 'social') openSocialHome();
   if (name === 'lifegram') openLifegram();
+  if (name === 'emergency') loadEmergency();
 }
 
 document.addEventListener('click', (ev) => {
@@ -3781,3 +3782,87 @@ window.addEventListener('message', async (ev) => {
   }
 });
 
+
+
+/* ------------------------------------------------------------------------ */
+/* EMERGENCY — polis, EMS ...: yaz ya da ara                                 */
+/* Sunucu (loe_jobcreator) kimlerin ulaşılabilir olduğunu söyler; yer ve numara */
+/* sunucunun kendi bildiği yerdir, buradan gönderilmez.                      */
+/* ------------------------------------------------------------------------ */
+
+const Emergency = { services: [], current: null };
+
+async function loadEmergency() {
+  const list = document.getElementById('emergency-list');
+  list.innerHTML = '<li class="empty-hint">…</li>';
+  const res = await post('emergencyList');
+  list.innerHTML = '';
+
+  if (!res || !res.success || !Array.isArray(res.services) || res.services.length === 0) {
+    list.innerHTML = '<li class="empty-hint">The emergency lines are not available right now.</li>';
+    return;
+  }
+
+  Emergency.services = res.services;
+
+  res.services.forEach((service) => {
+    const li = document.createElement('li');
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'emergency-service' + (service.kind === 'ems' ? ' ems' : '');
+    const units = Number(service.units) || 0;
+    btn.innerHTML = '<span>' + esc(service.label) + '</span><small>' + (units > 0 ? units + ' on duty' : 'nobody on duty') + '</small>';
+    btn.addEventListener('click', () => openEmergencyAgency(service));
+    li.appendChild(btn);
+    list.appendChild(li);
+  });
+}
+
+function openEmergencyAgency(service) {
+  Emergency.current = service;
+  document.getElementById('emergency-agency-title').textContent = service.label;
+  const units = Number(service.units) || 0;
+  document.getElementById('emergency-agency-state').textContent = units > 0
+    ? units + ' on duty' + (service.dispatcher ? ', a dispatcher is on.' : '.')
+    : 'Nobody is on duty right now: what you write waits for the first one.';
+  switchView('emergency-agency');
+}
+
+document.getElementById('emergency-write-btn').addEventListener('click', () => {
+  if (!Emergency.current) return;
+  document.getElementById('emergency-write-title').textContent = Emergency.current.label + ': what happened?';
+  const input = document.getElementById('emergency-text');
+  input.value = '';
+  document.getElementById('emergency-counter').textContent = '0 / 200';
+  document.getElementById('emergency-send').disabled = false;
+  switchView('emergency-write');
+  input.focus();
+});
+
+document.getElementById('emergency-text').addEventListener('input', (ev) => {
+  document.getElementById('emergency-counter').textContent = ev.target.value.length + ' / 200';
+});
+
+document.getElementById('emergency-send').addEventListener('click', async () => {
+  if (!Emergency.current) return;
+  const text = document.getElementById('emergency-text').value.trim();
+  if (text.length < 5) return showToast('error', 'Say what is happening.');
+  const btn = document.getElementById('emergency-send');
+  btn.disabled = true;
+  const res = await post('emergencyWrite', { id: Emergency.current.id, text });
+  btn.disabled = false;
+  if (!res || !res.success) return showToast('error', (res && res.reason) || 'It could not be sent.');
+  showToast('success', res.reason || 'Sent.');
+  switchView('home');
+});
+
+document.getElementById('emergency-call-btn').addEventListener('click', async () => {
+  if (!Emergency.current) return;
+  const btn = document.getElementById('emergency-call-btn');
+  btn.disabled = true;
+  const res = await post('emergencyCall', { id: Emergency.current.id });
+  btn.disabled = false;
+  if (!res || !res.success) return showToast('error', (res && res.reason) || 'The call could not be made.');
+  State.activeCallId = res.callId;
+  showActiveCallScreen(res.toNumber, 'ringing');
+});

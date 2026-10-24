@@ -39,6 +39,7 @@
           <button class="app-icon" data-open="phone"><span class="icon icon-phone"></span><label>Telefon</label></button>
           <button class="app-icon" data-open="messages"><span class="icon icon-messages"></span><label>Mesajlar</label><span class="badge" id="badge-messages" hidden></span></button>
           <button class="app-icon" data-open="contacts"><span class="icon icon-contacts"></span><label>Rehber</label></button>
+          <button class="app-icon" id="home-icon-emergency" data-open="emergency"><span class="icon icon-emergency"></span><label>Emergency</label></button>
           <button class="app-icon" data-open="gallery"><span class="icon icon-gallery"></span><label>Galeri</label></button>
           <button class="app-icon" id="home-icon-settings" data-open="settings"><span class="icon icon-settings"></span><label>Ayarlar</label></button>
           <button class="app-icon" id="home-icon-camera" data-open="camera"><span class="icon icon-camera"></span><label>Kamera</label></button>
@@ -247,6 +248,48 @@
           <h1>App Store</h1>
         </header>
         <ul class="list" id="store-list"></ul>
+      </section>
+
+      <!-- ============ ACİL (Emergency): polis, EMS, ... — yaz ya da ara ============ -->
+      <section class="screen-view app-view emergency-app" data-view="emergency" id="view-emergency">
+        <header class="app-header">
+          <button class="back-btn" data-back="home" aria-label="Ana Ekran"><span class="chev"></span></button>
+          <h1>Emergency</h1>
+        </header>
+        <p class="emergency-hint">Who do you need?</p>
+        <ul class="emergency-list" id="emergency-list"></ul>
+      </section>
+
+      <section class="screen-view app-view emergency-app" data-view="emergency-agency" id="view-emergency-agency">
+        <header class="app-header">
+          <button class="back-btn" data-back="emergency" aria-label="Emergency"><span class="chev"></span></button>
+          <h1 id="emergency-agency-title">Emergency</h1>
+        </header>
+        <div class="emergency-agency-body">
+          <p class="emergency-hint" id="emergency-agency-state"></p>
+          <button class="emergency-choice write" id="emergency-write-btn" type="button">
+            <b>Write</b>
+            <span>Tell them what happened. It goes to the officers on duty and waits if nobody is.</span>
+          </button>
+          <button class="emergency-choice call" id="emergency-call-btn" type="button">
+            <b>Call</b>
+            <span>Ring the dispatcher.</span>
+          </button>
+        </div>
+      </section>
+
+      <section class="screen-view app-view emergency-app" data-view="emergency-write" id="view-emergency-write">
+        <header class="app-header">
+          <button class="back-btn" data-back="emergency-agency" aria-label="Back"><span class="chev"></span></button>
+          <h1 id="emergency-write-title">What happened?</h1>
+        </header>
+        <div class="form">
+          <label for="emergency-text">What happened?</label>
+          <textarea id="emergency-text" rows="5" maxlength="200" placeholder="Say what is happening and where"></textarea>
+          <small class="emergency-counter" id="emergency-counter">0 / 200</small>
+          <button class="primary-btn emergency-send" id="emergency-send" type="button">Send</button>
+          <p class="emergency-hint">Your place and your number go with it. Do not send jokes: it is kept.</p>
+        </div>
       </section>
 
       <!-- ============ HESAP MAKİNESİ (App Store'dan indirilir) ============ -->
