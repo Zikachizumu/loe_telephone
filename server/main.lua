@@ -575,7 +575,8 @@ local function teardownCall(callId, reason, duration)
     end
 end
 
-lib.callback.register('loe_telephone:startCall', function(source, toNumber)
+--- Bir aramayı başlatır (NUI'nin "ara" tuşu ve Acil uygulaması aynı yolu kullanır).
+local function startCall(source, toNumber)
     local myNumber, citizenid, reason = requireActiveNumber(source)
     if not myNumber then return { success = false, reason = reason } end
 
@@ -616,7 +617,10 @@ lib.callback.register('loe_telephone:startCall', function(source, toNumber)
     end)
 
     return { success = true, callId = callId, toNumber = to }
-end)
+end
+
+LoeTelephone.startCall = startCall
+lib.callback.register('loe_telephone:startCall', startCall)
 
 lib.callback.register('loe_telephone:answerCall', function(source, callId)
     local call = activeCalls[callId]

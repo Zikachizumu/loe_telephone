@@ -49,6 +49,7 @@
   --svg-chevron: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='none' stroke='white' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round' d='M15 5l-7 7 7 7'/%3E%3C/svg%3E");
   --svg-calculator: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='white' fill-rule='evenodd' d='M6 2.5h12a1.5 1.5 0 0 1 1.5 1.5v16a1.5 1.5 0 0 1-1.5 1.5H6A1.5 1.5 0 0 1 4.5 20V4A1.5 1.5 0 0 1 6 2.5zM6.8 5v4.2h10.4V5H6.8zm0 6.3v2h2.1v-2H6.8zm3.55 0v2h2.1v-2h-2.1zm3.55 0v2h2.1v-2h-2.1zM6.8 14.7v2h2.1v-2H6.8zm3.55 0v2h2.1v-2h-2.1zm3.55 0v5.3h2.1v-5.3h-2.1zM6.8 18v2h2.1v-2H6.8zm3.55 0v2h2.1v-2h-2.1z'/%3E%3C/svg%3E");
   --svg-notes: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='white' fill-rule='evenodd' d='M6.5 2.5h8.4L18.5 7v14a1 1 0 0 1-1 1h-11a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1zM14 4v3.7h3.2L14 4zM7.2 12.3h9v1.6h-9v-1.6zm0 4h9v1.6h-9v-1.6zm0-8h5.2v1.6H7.2V8.3z'/%3E%3C/svg%3E");
+  --svg-emergency: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='white' fill-rule='evenodd' d='M12 2 4 5v6c0 5 3.4 9.4 8 11 4.6-1.6 8-6 8-11V5l-8-3zm-1 5h2v6h-2V7zm0 8h2v2h-2v-2z'/%3E%3C/svg%3E");
   --svg-appstore-fallback: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='white' d='M12 2 4 20h3.2l1.5-3.6h6.6L16.8 20H20L12 2zm0 5.4 2.3 5.6H9.7L12 7.4z'/%3E%3C/svg%3E");
   --svg-cc-silent: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='white' d='M12 22a2 2 0 0 0 2-2h-4a2 2 0 0 0 2 2zm6-6v-5a6 6 0 0 0-4-5.66V4a2 2 0 1 0-4 0v1.34A6 6 0 0 0 6 11v5l-2 2v1h16v-1l-2-2z'/%3E%3Cpath fill='none' stroke='white' stroke-width='2' stroke-linecap='round' d='M3 3l18 18'/%3E%3C/svg%3E");
   --svg-cc-flash: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='white' d='M13 2 3 14h6l-1 8 11-14h-7l1-6z'/%3E%3C/svg%3E");
@@ -439,6 +440,7 @@ input { font-family: inherit; }
   background-repeat: no-repeat;
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.4);
 }
+.icon-emergency { background-color: #e11d48; background-image: var(--svg-emergency); }
 .icon-calculator { background-color: #ff9f0a; background-image: var(--svg-calculator); }
 .icon-notes { background-color: #eab308; background-image: var(--svg-notes); }
 .icon-lifegram,
@@ -2289,3 +2291,53 @@ body.camera-mode #phone-root { opacity: 0; pointer-events: none; }
 .bank-fine-pay { margin-top: 6px; }
 .bank-fine-paid { margin-top: 6px; font-size: 11px; font-weight: 700; color: var(--bank-gain); }
 .bank-fine-row .bank-tx-amt.pos { color: var(--bank-gain); }
+
+
+/* ==========================================================================
+   EMERGENCY (polis, EMS ... — yaz ya da ara)
+   ========================================================================== */
+
+.emergency-app .app-header h1 { color: #ff8da1; }
+.emergency-hint { margin: 10px 16px 4px; font-size: 12.5px; color: var(--text-secondary); }
+.emergency-list { list-style: none; margin: 0; padding: 8px 14px 20px; display: flex; flex-direction: column; gap: 10px; overflow-y: auto; flex: 1; }
+.emergency-service {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 16px;
+  border-radius: 16px;
+  border: 1px solid rgba(244, 73, 95, 0.4);
+  background: linear-gradient(180deg, rgba(244, 73, 95, 0.22), rgba(244, 73, 95, 0.08));
+  color: var(--text-primary);
+  font-size: 17px;
+  font-weight: 700;
+  letter-spacing: 0.4px;
+  text-align: left;
+  cursor: pointer;
+}
+.emergency-service:active { transform: scale(0.98); }
+.emergency-service small { margin-left: auto; font-size: 11.5px; font-weight: 500; color: var(--text-secondary); text-align: right; }
+.emergency-service.ems { border-color: rgba(52, 211, 153, 0.45); background: linear-gradient(180deg, rgba(52, 211, 153, 0.2), rgba(52, 211, 153, 0.06)); }
+.emergency-agency-body { padding: 8px 14px 20px; display: flex; flex-direction: column; gap: 12px; }
+.emergency-choice {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  width: 100%;
+  padding: 16px;
+  border-radius: 16px;
+  border: 1px solid var(--hairline);
+  background: var(--surface-1);
+  color: var(--text-primary);
+  text-align: left;
+  cursor: pointer;
+}
+.emergency-choice b { font-size: 17px; }
+.emergency-choice span { font-size: 12.5px; color: var(--text-secondary); }
+.emergency-choice.write { border-color: rgba(34, 211, 238, 0.5); }
+.emergency-choice.call { border-color: rgba(52, 211, 153, 0.5); }
+.emergency-choice:disabled { opacity: 0.5; cursor: default; }
+.emergency-counter { align-self: flex-end; color: var(--text-tertiary); }
+.emergency-send { background: #e11d48; color: #fff; }
+.emergency-send:disabled { opacity: 0.5; }

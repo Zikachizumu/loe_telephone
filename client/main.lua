@@ -58,7 +58,11 @@ end
 local function togglePhone()
     -- Kamera açıkken telefon tuşu kameradan çıkıp telefona döner.
     if cameraOpen then return exitCamera() end
-    if phoneOpen then closePhone() else openPhone('home') end
+    if phoneOpen then return closePhone() end
+    -- Başka bir kaynağın tam ekran sayfası açıkken (ör. loe_jobcreator editörü) tuş telefonu açmaz:
+    -- o kaynak LocalPlayer.state.loeUiBusy = true koyar.
+    if LocalPlayer.state.loeUiBusy then return end
+    openPhone('home')
 end
 
 ---------------------------------------------------------------------------
