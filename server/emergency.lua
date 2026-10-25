@@ -49,8 +49,6 @@ lib.callback.register('loe_telephone:emergencyList', function()
             id = tostring(service.id),
             label = tostring(service.label),
             kind = service.kind == 'ems' and 'ems' or 'police',
-            units = tonumber(service.units) or 0,
-            dispatcher = service.dispatcher == true,
         }
     end
 

@@ -3810,8 +3810,7 @@ async function loadEmergency() {
     const btn = document.createElement('button');
     btn.type = 'button';
     btn.className = 'emergency-service' + (service.kind === 'ems' ? ' ems' : '');
-    const units = Number(service.units) || 0;
-    btn.innerHTML = '<span>' + esc(service.label) + '</span><small>' + (units > 0 ? units + ' on duty' : 'nobody on duty') + '</small>';
+    btn.innerHTML = '<span class="crest ' + (service.kind === 'ems' ? 'crest-ems' : 'crest-police') + '"></span><span>' + esc(service.label) + '</span>';
     btn.addEventListener('click', () => openEmergencyAgency(service));
     li.appendChild(btn);
     list.appendChild(li);
@@ -3821,10 +3820,7 @@ async function loadEmergency() {
 function openEmergencyAgency(service) {
   Emergency.current = service;
   document.getElementById('emergency-agency-title').textContent = service.label;
-  const units = Number(service.units) || 0;
-  document.getElementById('emergency-agency-state').textContent = units > 0
-    ? units + ' on duty' + (service.dispatcher ? ', a dispatcher is on.' : '.')
-    : 'Nobody is on duty right now: what you write waits for the first one.';
+  document.getElementById('emergency-agency-crest').className = 'crest crest-big ' + (service.kind === 'ems' ? 'crest-ems' : 'crest-police');
   switchView('emergency-agency');
 }
 
