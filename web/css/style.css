@@ -1658,14 +1658,13 @@ body.camera-mode #phone-root { opacity: 0; pointer-events: none; }
   z-index: 2000;
 }
 .toast {
-  background: rgba(16, 20, 26, 0.92);
-  backdrop-filter: blur(14px);
+  /* No blur and no big shadow: over the game's own picture (this page is transparent) they were drawn as a black block around the toast. */
+  background: rgb(16, 20, 26);
   border: 1px solid var(--hairline);
   border-radius: 12px;
   padding: 10px 16px;
   font-size: 13px;
   color: var(--text-primary);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
   animation: toast-in 0.2s ease;
   max-width: 280px;
 }
@@ -2317,7 +2316,10 @@ body.camera-mode #phone-root { opacity: 0; pointer-events: none; }
   cursor: pointer;
 }
 .emergency-service:active { transform: scale(0.98); }
-.emergency-service small { margin-left: auto; font-size: 11.5px; font-weight: 500; color: var(--text-secondary); text-align: right; }
+.crest { flex: 0 0 auto; width: 38px; height: 38px; background-repeat: no-repeat; background-position: center; background-size: contain; }
+.crest-police { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'%3E%3Cpath d='M24 2.5 6.5 8.5v13.6c0 10.6 7.4 19.6 17.5 23.4 10.1-3.8 17.5-12.8 17.5-23.4V8.5L24 2.5z' fill='%231e3a8a' stroke='%23d4af37' stroke-width='2.4' stroke-linejoin='round'/%3E%3Cpath d='M24 10 26.7 17.3 34.5 17.6 28.4 22.4 30.5 29.9 24 25.6 17.5 29.9 19.6 22.4 13.5 17.6 21.3 17.3z' fill='%23d4af37'/%3E%3Cpath d='M15 36c2.6 2.4 5.6 4.3 9 5.7 3.4-1.4 6.4-3.3 9-5.7' fill='none' stroke='%23d4af37' stroke-width='1.6' stroke-linecap='round'/%3E%3C/svg%3E"); }
+.crest-ems { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'%3E%3Cg fill='%23ffffff' stroke='%23ffffff' stroke-width='3.2' stroke-linejoin='round'%3E%3Crect x='20.2' y='3.5' width='7.6' height='41' rx='1.5'/%3E%3Crect x='20.2' y='3.5' width='7.6' height='41' rx='1.5' transform='rotate(60 24 24)'/%3E%3Crect x='20.2' y='3.5' width='7.6' height='41' rx='1.5' transform='rotate(120 24 24)'/%3E%3C/g%3E%3Cg fill='%231d6fe5'%3E%3Crect x='20.2' y='3.5' width='7.6' height='41' rx='1.5'/%3E%3Crect x='20.2' y='3.5' width='7.6' height='41' rx='1.5' transform='rotate(60 24 24)'/%3E%3Crect x='20.2' y='3.5' width='7.6' height='41' rx='1.5' transform='rotate(120 24 24)'/%3E%3C/g%3E%3Cpath d='M24 9v30' stroke='%23ffffff' stroke-width='2.4' stroke-linecap='round'/%3E%3Cpath d='M18.8 16.5c0-3.4 10.4-3.4 10.4 0s-10.4 4.6-10.4 8.4 10.4 4.8 10.4 8.2' fill='none' stroke='%23ffffff' stroke-width='2.2' stroke-linecap='round'/%3E%3C/svg%3E"); }
+.crest-big { width: 84px; height: 84px; margin: 6px auto 4px; }
 .emergency-service.ems { border-color: rgba(52, 211, 153, 0.45); background: linear-gradient(180deg, rgba(52, 211, 153, 0.2), rgba(52, 211, 153, 0.06)); }
 .emergency-agency-body { padding: 8px 14px 20px; display: flex; flex-direction: column; gap: 12px; }
 .emergency-choice {
